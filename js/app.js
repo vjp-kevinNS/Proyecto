@@ -97,4 +97,13 @@ console.log(`${NOMBRE_APP}: ${plantas.length} plantas cargadas`);
 
 console.table(plantas);
 
+// LISTADO 1
+const LIMITE_ALTURA = 50;
 
+console.log("--- Todas las plantas ---");
+
+for (const planta of plantas) {
+    const etiqueta = planta.altura <= LIMITE_ALTURA ? "Pequeña" : "Grande";
+
+    console.log(`${planta.id}: ${planta.nombre} - ${planta.altura} cm - ${etiqueta}`);
+}
