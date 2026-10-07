@@ -107,3 +107,16 @@ for (const planta of plantas) {
 
     console.log(`${planta.id}: ${planta.nombre} - ${planta.altura} cm - ${etiqueta}`);
 }
+
+console.log("--- Plantas que cumplen la condición ---");
+
+let encontrados = 0;
+
+for (const planta of plantas) {
+    if (planta.altura >= LIMITE_ALTURA && planta.estado === "Saludable") {
+        console.log(`${planta.nombre}: ${planta.altura} cm - ${planta.estado}`);
+        encontrados++;
+    }
+}
+
+console.log(`${encontrados} de ${plantas.length} plantas cumplen la condición`);
