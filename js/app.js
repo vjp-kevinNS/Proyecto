@@ -111,4 +111,31 @@ function listar(lista) {
     return lista;
 }
 
+function buscarPorTexto(lista, texto) {
+    const textoBuscado = texto.toLowerCase().trim();
+    const resultados = [];
+
+    console.log(`--- Búsqueda: ${texto} ---`);
+
+    if (!textoBuscado) {
+        console.log("Debes escribir algo para buscar.");
+        return resultados;
+    }
+
+    for (const planta of lista) {
+        const resumen = `${planta.nombre} ${planta.especie} ${planta.ubicacion} ${planta.estado}`.toLowerCase();
+
+        if (resumen.includes(textoBuscado)) {
+            resultados.push(planta);
+            console.log(`${planta.id}: ${planta.nombre} - ${planta.especie}`);
+        }
+    }
+
+    if (resultados.length === 0) {
+        console.log("No se encontraron coincidencias.");
+    }
+
+    return resultados;
+}
+
 listar(plantas);
