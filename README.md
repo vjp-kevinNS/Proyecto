@@ -29,28 +29,41 @@ Para ejecutar la aplicación:
 
 ## Funciones de la colección
 
-Las funciones están en `js/app.js` y se pueden probar desde la consola del navegador:
+Las cuatro funciones están en `js/app.js` y se pueden probar desde la consola del navegador:
 
-- `listar(plantas)`: muestra las plantas de la colección.
-- `buscarPorTexto(plantas, "salón")`: busca coincidencias en el nombre, especie, ubicación o estado. La búsqueda no distingue entre mayúsculas y minúsculas.
-- `anadirPlanta(plantas, nuevaPlanta)`: añade una planta. Si no se proporciona un `id`, se asigna uno a partir del último elemento de la colección.
-- `eliminarPorId(plantas, 3)`: elimina de la colección la planta cuyo `id` coincide con el indicado.
+- `listar(lista)`: recorre y muestra todas las plantas con su id, nombre, altura y ubicación. Para probarla:
 
-Ejemplo para añadir una planta y comprobarla:
+  ```js
+  listar(plantas);
+  ```
 
-```js
-anadirPlanta(plantas, {
-    nombre: "Menta",
-    especie: "Mentha",
-    fecha_adquisicion: "2026-10-14",
-    altura: 15,
-    ubicacion: "Cocina",
-    estado: "Saludable"
-});
-listar(plantas);
-```
+- `buscarPorTexto(lista, texto)`: busca el texto en el nombre, especie, ubicación o estado. No distingue entre mayúsculas y minúsculas. Por ejemplo:
 
-Para eliminar una planta, se puede llamar a `eliminarPorId(plantas, 3)` y luego a `listar(plantas)` para ver la colección actualizada.
+  ```js
+  buscarPorTexto(plantas, "salón");
+  ```
+
+- `anadirPlanta(lista, nuevaPlanta)`: añade una planta. Si no se proporciona un `id`, se asigna uno a partir del último id de la colección. Ejemplo:
+
+  ```js
+  anadirPlanta(plantas, {
+      nombre: "Menta",
+      especie: "Mentha",
+      fecha_adquisicion: "2026-10-14",
+      altura: 15,
+      ubicacion: "Cocina",
+      estado: "Saludable"
+  });
+  ```
+
+- `eliminarPorId(lista, id)`: elimina de la colección la planta cuyo id coincide con el indicado. Por ejemplo, para eliminar la planta con id `3` y después mostrar la colección actualizada:
+
+  ```js
+  eliminarPorId(plantas, 3);
+  listar(plantas);
+  ```
+
+Los cambios al añadir o eliminar plantas solo se mantienen mientras la página siga abierta; al recargarla, se vuelve a cargar la colección inicial.
 
 ## Tecnologías utilizadas
 
