@@ -132,7 +132,6 @@ listar(plantas);
 
 ## Ejecución
 
-
 ```js
 // Mostrar todas las plantas con una etiqueta según su altura
 listarTodos(plantas);
