@@ -19,15 +19,6 @@ Cada planta contiene los siguientes campos:
 
 ## Ejecución
 
-Para ejecutar la aplicación:
-
-1. Descargar o clonar el repositorio.
-2. Abrir la carpeta del proyecto con Visual Studio Code.
-3. Abrir el archivo `index.html` en un navegador.
-4. Abrir las herramientas de desarrollador con F12.
-5. Entrar en la pestaña Console. La colección se llama `plantas` y se muestra al cargar la página.
-
-## Funciones de la colección
 
 Las cuatro funciones están en `js/app.js` y se pueden probar desde la consola del navegador:
 
