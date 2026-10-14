@@ -18,6 +18,14 @@ Proyecto/
 
 `index.html` carga `js/app.js` con el atributo `defer`, por lo que el código se ejecuta al abrir la página en un navegador.
 
+## Cómo ejecutar la aplicación
+
+1. Abre la carpeta `Proyecto` en tu editor de código.
+2. Ejecuta `index.html` en un navegador (por ejemplo, con doble clic o desde una extensión como Live Server).
+3. Abre la consola del navegador con `F12` para ver los mensajes y probar las funciones del proyecto.
+
+> La aplicación no tiene interfaz gráfica para añadir o eliminar plantas; todo se hace desde la consola del navegador durante la sesión actual.
+
 ## Datos de la colección
 
 La constante `plantas` contiene inicialmente diez plantas. Cada objeto tiene estos campos:
