@@ -175,3 +175,85 @@ function eliminarPorId(lista, id) {
 }
 
 listar(plantas);
+
+// FUNCIÓN 1: LISTAR TODOS
+
+const LIMITE_ALTURA = 50;
+
+function listarTodos(lista) {
+    console.log("--- Todas las plantas ---");
+
+    for (const planta of lista) {
+        const etiqueta = planta.altura <= LIMITE_ALTURA
+            ? "Pequeña"
+            : "Grande";
+
+        console.log(
+            `${planta.id}: ${planta.nombre} - ${planta.altura} cm - ${etiqueta}`
+        );
+    }
+}
+
+
+// FUNCIÓN 2: FILTRAR
+
+function filtrar(lista, limite) {
+    let encontrados = 0;
+
+    console.log(`--- Plantas de ${limite} cm o más y saludables ---`);
+
+    for (const planta of lista) {
+        if (planta.altura >= limite && planta.estado === "Saludable") {
+            console.log(
+                `${planta.nombre}: ${planta.altura} cm - ${planta.estado}`
+            );
+
+            encontrados++;
+        }
+    }
+
+    return encontrados;
+}
+
+
+// FUNCIÓN 3: CONTAR POR CATEGORÍA
+
+function contarPorCategoria(lista) {
+    let saludables = 0;
+    let necesitanAgua = 0;
+    let necesitanCuidados = 0;
+
+    for (const planta of lista) {
+        switch (planta.estado) {
+            case "Saludable":
+                saludables++;
+                break;
+
+            case "Necesita agua":
+                necesitanAgua++;
+                break;
+
+            case "Necesita cuidados":
+                necesitanCuidados++;
+                break;
+
+            default:
+                console.log(`Estado inesperado: ${planta.estado}`);
+        }
+    }
+
+    console.log(`Saludables: ${saludables}`);
+    console.log(`Necesitan agua: ${necesitanAgua}`);
+    console.log(`Necesitan cuidados: ${necesitanCuidados}`);
+}
+
+
+// LLAMADAS
+
+listarTodos(plantas);
+
+const resultado50 = filtrar(plantas, 50);
+console.log(`Resultado con límite 50: ${resultado50}`);
+
+const resultado60 = filtrar(plantas, 60);
+console.log(`Resultado con límite 60: ${resultado60}`);
