@@ -158,4 +158,20 @@ function anadirPlanta(lista, nuevaPlanta) {
     return lista;
 }
 
+function eliminarPorId(lista, id) {
+    console.log("--- Eliminar planta por id ---");
+
+    const indice = lista.findIndex(planta => planta.id === id);
+
+    if (indice === -1) {
+        console.log(`No existe ninguna planta con id ${id}.`);
+        return lista;
+    }
+
+    const [eliminada] = lista.splice(indice, 1);
+    console.log(`Planta eliminada: ${eliminada.nombre}`);
+
+    return lista;
+}
+
 listar(plantas);
