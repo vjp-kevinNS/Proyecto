@@ -3,7 +3,7 @@
 ## Descripción
 
 Mis Plantas es una aplicación sencilla para gestionar información sobre diferentes plantas.
-La aplicación contiene una lista de plantas con sus principales características y muestra los datos mediante la consola del navegador.
+La aplicación contiene una colección de plantas y permite consultarla y modificarla mediante funciones de JavaScript. Los resultados se muestran en la consola del navegador.
 
 ## Campos
 
@@ -25,7 +25,32 @@ Para ejecutar la aplicación:
 2. Abrir la carpeta del proyecto con Visual Studio Code.
 3. Abrir el archivo `index.html` en un navegador.
 4. Abrir las herramientas de desarrollador con F12.
-5. Entrar en la pestaña Console para consultar la lista de plantas.
+5. Entrar en la pestaña Console. La colección se llama `plantas` y se muestra al cargar la página.
+
+## Funciones de la colección
+
+Las funciones están en `js/app.js` y se pueden probar desde la consola del navegador:
+
+- `listar(plantas)`: muestra las plantas de la colección.
+- `buscarPorTexto(plantas, "salón")`: busca coincidencias en el nombre, especie, ubicación o estado. La búsqueda no distingue entre mayúsculas y minúsculas.
+- `anadirPlanta(plantas, nuevaPlanta)`: añade una planta. Si no se proporciona un `id`, se asigna uno a partir del último elemento de la colección.
+- `eliminarPorId(plantas, 3)`: elimina de la colección la planta cuyo `id` coincide con el indicado.
+
+Ejemplo para añadir una planta y comprobarla:
+
+```js
+anadirPlanta(plantas, {
+    nombre: "Menta",
+    especie: "Mentha",
+    fecha_adquisicion: "2026-10-14",
+    altura: 15,
+    ubicacion: "Cocina",
+    estado: "Saludable"
+});
+listar(plantas);
+```
+
+Para eliminar una planta, se puede llamar a `eliminarPorId(plantas, 3)` y luego a `listar(plantas)` para ver la colección actualizada.
 
 ## Tecnologías utilizadas
 
