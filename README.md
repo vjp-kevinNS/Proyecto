@@ -124,13 +124,6 @@ listar(plantas);
 
 ## Ejecución
 
-1. Abre `index.html` en un navegador.
-2. Pulsa **F12** y selecciona la pestaña **Console** para ver los datos y resultados.
-3. Escribe llamadas a las funciones en la consola para consultar o modificar la colección durante esa sesión.
-
-## Cómo usar las funciones desde la consola
-
-Con la página abierta, copia un ejemplo en la consola y pulsa **Enter**. Ejecuta los ejemplos por separado; si pegas el bloque entero, también se añadirán y eliminarán plantas:
 
 ```js
 // Mostrar todas las plantas con una etiqueta según su altura
