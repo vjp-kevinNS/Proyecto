@@ -128,6 +128,46 @@ listar(plantas);
 2. Pulsa **F12** y selecciona la pestaña **Console** para ver los datos y resultados.
 3. Escribe llamadas a las funciones en la consola para consultar o modificar la colección durante esa sesión.
 
+## Cómo usar las funciones desde la consola
+
+Con la página abierta, copia un ejemplo en la consola y pulsa **Enter**. Ejecuta los ejemplos por separado; si pegas el bloque entero, también se añadirán y eliminarán plantas:
+
+```js
+// Mostrar todas las plantas con una etiqueta según su altura
+listarTodos(plantas);
+
+// Mostrar plantas saludables que midan al menos 50 cm
+// El resultado también devuelve la cantidad encontrada
+filtrar(plantas, 50);
+
+// Contar las plantas según su estado
+contarPorCategoria(plantas);
+
+// Mostrar id, nombre, altura y ubicación
+listar(plantas);
+
+// Buscar por nombre, especie, ubicación o estado
+buscarPorTexto(plantas, "salón");
+buscarPorTexto(plantas, "monstera");
+
+// Añadir una planta y mostrar la colección actualizada
+anadirPlanta(plantas, {
+    nombre: "Menta",
+    especie: "Mentha",
+    fecha_adquisicion: "2026-10-14",
+    altura: 15,
+    ubicacion: "Cocina",
+    estado: "Saludable"
+});
+listar(plantas);
+
+// Eliminar la planta con id 3 y mostrar la colección actualizada
+eliminarPorId(plantas, 3);
+listar(plantas);
+```
+
+Los comandos que añaden o eliminan plantas modifican la colección mientras la página está abierta. Al recargarla, se recuperan los datos iniciales. Si quieres probar el ejemplo de eliminación sin perder una planta durante la sesión, puedes recargar la página después.
+
 ## Tecnologías
 
 - HTML5
