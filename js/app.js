@@ -138,4 +138,24 @@ function buscarPorTexto(lista, texto) {
     return resultados;
 }
 
+function anadirPlanta(lista, nuevaPlanta) {
+    console.log("--- Añadir planta ---");
+
+    if (!nuevaPlanta || typeof nuevaPlanta !== "object") {
+        console.log("La planta nueva no es válida.");
+        return lista;
+    }
+
+    const ultimaId = lista.length > 0 ? lista[lista.length - 1].id : 0;
+    const plantaConId = {
+        ...nuevaPlanta,
+        id: nuevaPlanta.id ?? ultimaId + 1
+    };
+
+    lista.push(plantaConId);
+    console.log(`Planta añadida: ${plantaConId.nombre}`);
+
+    return lista;
+}
+
 listar(plantas);
