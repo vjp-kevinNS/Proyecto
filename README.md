@@ -4,7 +4,9 @@
 
 Mis Plantas es una aplicación sencilla de JavaScript para consultar y gestionar una colección de plantas. La información se guarda en un array en memoria y las operaciones y resultados se muestran en la consola del navegador.
 
-No hay una interfaz para gestionar las plantas ni una base de datos: los cambios realizados durante la sesión se pierden al recargar la página.
+La aplicación permite listar plantas, filtrarlas por altura y estado, contar sus categorías, buscar por texto, añadir y eliminar plantas y consultar estadísticas sobre sus alturas.
+
+No hay una interfaz para gestionar las plantas ni una base de datos. Los cambios realizados durante la sesión se pierden al recargar la página.
 
 ## Estructura del proyecto
 
@@ -16,159 +18,262 @@ Proyecto/
     └── app.js
 ```
 
-`index.html` carga `js/app.js` con el atributo `defer`, por lo que el código se ejecuta al abrir la página en un navegador.
+El archivo `index.html` carga `js/app.js` mediante la etiqueta `<script src="js/app.js" defer></script>`.
 
 ## Cómo ejecutar la aplicación
 
-1. Abre la carpeta `Proyecto` en tu editor de código.
-2. Ejecuta `index.html` en un navegador (por ejemplo, con doble clic o desde una extensión como Live Server).
-3. Abre la consola del navegador con `F12` para ver los mensajes y probar las funciones del proyecto.
+1. Abre la carpeta del proyecto en tu editor de código.
+2. Abre `index.html` en un navegador, por ejemplo, mediante doble clic o utilizando Live Server.
+3. Abre las herramientas de desarrollador con `F12`.
+4. Entra en la pestaña Console para ver los resultados y probar las funciones.
 
-> La aplicación no tiene interfaz gráfica para añadir o eliminar plantas; todo se hace desde la consola del navegador durante la sesión actual.
+La aplicación funciona desde la consola del navegador. No necesita una base de datos ni una interfaz gráfica.
 
 ## Datos de la colección
 
-La constante `plantas` contiene inicialmente diez plantas. Cada objeto tiene estos campos:
+La constante `plantas` contiene inicialmente diez plantas. Cada objeto tiene los siguientes campos:
 
 | Campo | Descripción | Tipo |
-| --- | --- | --- |
+|---|---|---|
 | `id` | Identificador de la planta. | Número |
-| `nombre` | Nombre común. | Texto |
-| `especie` | Nombre de la especie. | Texto |
+| `nombre` | Nombre común de la planta. | Texto |
+| `especie` | Nombre científico de la planta. | Texto |
 | `fecha_adquisicion` | Fecha de adquisición en formato `AAAA-MM-DD`. | Texto |
-| `altura` | Altura en centímetros. | Número |
-| `ubicacion` | Lugar donde está la planta. | Texto |
-| `estado` | Estado de la planta. | Texto |
+| `altura` | Altura de la planta en centímetros. | Número |
+| `ubicacion` | Lugar donde se encuentra la planta. | Texto |
+| `estado` | Estado actual de la planta. | Texto |
 
-Los estados usados en los datos iniciales son `Saludable`, `Necesita agua` y `Necesita cuidados`.
+Los estados utilizados en los datos iniciales son `Saludable`, `Necesita agua` y `Necesita cuidados`.
 
-La constante `NOMBRE_APP` contiene el nombre de la aplicación (`Mis Plantas`), y `LIMITE_ALTURA` establece en 50 cm el límite que utiliza `listarTodos` para etiquetar las plantas.
+La constante `NOMBRE_APP` contiene el nombre de la aplicación (`Mis Plantas`). La constante `LIMITE_ALTURA` establece el límite de 50 cm utilizado por `listarTodos` para clasificar las plantas como pequeñas o grandes.
 
-## Comportamiento al cargar la página
-
-Al abrir `index.html`, el programa:
-
-1. Muestra el nombre de la aplicación y el número de plantas cargadas.
-2. Muestra la colección inicial en formato de tabla con `console.table`.
-3. Ejecuta `listarTodos(plantas)`.
-4. Filtra y muestra las plantas saludables que miden al menos 50 cm y, después, las que miden al menos 60 cm. También muestra el número de resultados de cada filtro.
-5. Ejecuta `listar(plantas)` para mostrar el id, nombre, altura y ubicación de cada planta.
+Al cargar la página, los datos iniciales se muestran mediante `console.table()`.
 
 ## Funciones
 
-Las funciones se pueden probar desde la consola del navegador, en la pestaña **Console** de las herramientas de desarrollador (F12).
+Todas las funciones pueden probarse desde la consola del navegador. Para utilizarlas, escribe la llamada correspondiente y pulsa Intro.
 
-### `listarTodos(lista)`
+### 1. `listarTodos(lista)`
 
-Recorre la lista y muestra el id, nombre, altura y una etiqueta según la altura:
+Recorre la colección y muestra el identificador, el nombre, la altura y una etiqueta según el tamaño de cada planta.
 
-- `Pequeña` si mide 50 cm o menos.
-- `Grande` si mide más de 50 cm.
+- `Pequeña`: altura menor o igual a 50 cm.
+- `Grande`: altura superior a 50 cm.
 
-```js
+Ejemplo:
+
+```javascript
 listarTodos(plantas);
 ```
 
-### `filtrar(lista, limite)`
+### 2. `filtrar(lista, limite)`
 
-Muestra las plantas que cumplen ambas condiciones: su altura es igual o superior al límite indicado y su estado es `Saludable`. Devuelve el número de plantas que cumplen las condiciones.
+Muestra las plantas que cumplen dos condiciones: su altura es igual o superior al límite indicado y su estado es `Saludable`.
 
-```js
+Devuelve el número de plantas que cumplen ambas condiciones.
+
+Ejemplos:
+
+```javascript
+filtrar(plantas, 50);
+filtrar(plantas, 60);
+```
+
+Para guardar y mostrar el número de resultados:
+
+```javascript
 const cantidad = filtrar(plantas, 50);
 console.log(cantidad);
 ```
 
-### `contarPorCategoria(lista)`
+### 3. `contarPorCategoria(lista)`
 
-Cuenta las plantas con estado `Saludable`, `Necesita agua` y `Necesita cuidados`, y muestra los tres totales. Si encuentra un estado distinto, muestra un aviso en la consola.
+Cuenta las plantas de cada categoría utilizando una estructura `switch` y muestra los resultados por consola.
 
-```js
+Las categorías son:
+
+- Saludables.
+- Necesitan agua.
+- Necesitan cuidados.
+
+Si encuentra un estado diferente de los contemplados, muestra un aviso.
+
+Ejemplo:
+
+```javascript
 contarPorCategoria(plantas);
 ```
 
-Esta función está definida, pero no se ejecuta automáticamente al cargar la página.
+### 4. `listar(lista)`
 
-### `listar(lista)`
+Muestra el identificador, el nombre, la altura y la ubicación de cada planta.
 
-Muestra el id, nombre, altura y ubicación de cada planta, y devuelve la lista. Si la lista está vacía, muestra un mensaje y devuelve un array vacío.
+Devuelve la lista recibida. Si la lista está vacía, muestra un mensaje y devuelve un array vacío.
 
-```js
+Ejemplo:
+
+```javascript
 listar(plantas);
 ```
 
-### `buscarPorTexto(lista, texto)`
+### 5. `buscarPorTexto(lista, texto)`
 
-Busca el texto indicado en el nombre, la especie, la ubicación y el estado. La búsqueda no distingue entre mayúsculas y minúsculas y elimina los espacios al principio y al final del texto buscado. Muestra las coincidencias y devuelve un array con las plantas encontradas. Si el texto está vacío o no hay coincidencias, muestra el mensaje correspondiente.
+Busca un texto en el nombre, la especie, la ubicación y el estado de las plantas.
 
-```js
-const resultados = buscarPorTexto(plantas, "salón");
+La búsqueda no distingue entre mayúsculas y minúsculas y elimina los espacios al principio y al final del texto introducido.
+
+Devuelve un array con las plantas encontradas. Si el texto está vacío o no hay coincidencias, muestra un mensaje y devuelve un array vacío.
+
+Ejemplos:
+
+```javascript
+buscarPorTexto(plantas, "MONSTERA");
+buscarPorTexto(plantas, "salón");
+buscarPorTexto(plantas, "cactus");
 ```
 
-### `anadirPlanta(lista, nuevaPlanta)`
+Para guardar los resultados:
 
-Añade una planta a la lista y devuelve la lista actualizada. La planta debe ser un objeto válido. Si no se indica un `id` (o es `null`), asigna uno igual al id del último elemento más uno; si la lista está vacía, asigna el id `1`. Si la planta no es válida, muestra un mensaje y devuelve la lista sin añadirla.
+```javascript
+const resultados = buscarPorTexto(plantas, "salón");
+console.table(resultados);
+```
 
-```js
-anadirPlanta(plantas, {
+### 6. `anadir(lista, elemento)`
+
+Añade una planta nueva a la colección.
+
+Calcula el identificador siguiente al mayor ID existente, crea el objeto de la nueva planta, lo incorpora al array mediante `push()` y devuelve el ID asignado.
+
+Si el elemento no es válido, muestra un mensaje y devuelve `null`.
+
+Ejemplo:
+
+```javascript
+anadir(plantas, {
     nombre: "Menta",
     especie: "Mentha",
-    fecha_adquisicion: "2026-10-14",
+    fecha_adquisicion: "2026-10-19",
     altura: 15,
     ubicacion: "Cocina",
     estado: "Saludable"
 });
 ```
 
-La función no valida que el objeto incluya todos los campos ni que sus valores tengan un formato concreto.
+Para comprobar el resultado:
 
-### `eliminarPorId(lista, id)`
-
-Elimina de la lista la primera planta cuyo id coincide exactamente con el indicado y devuelve la lista actualizada. Si no encuentra ese id, muestra un aviso y devuelve la lista sin cambios.
-
-```js
-eliminarPorId(plantas, 3);
+```javascript
 listar(plantas);
 ```
 
-## Ejecución
+La función asigna automáticamente el ID, por lo que no es necesario escribirlo en el objeto.
 
-```js
-// Mostrar todas las plantas con una etiqueta según su altura
+### 7. `eliminarPorId(lista, id)`
+
+Busca una planta por su identificador y elimina el elemento correspondiente mediante `splice()`.
+
+- Devuelve `true` si encuentra y elimina la planta.
+- Devuelve `false` si el identificador no existe.
+
+Ejemplos:
+
+```javascript
+eliminarPorId(plantas, 3);
+eliminarPorId(plantas, 99);
+```
+
+Para guardar el resultado:
+
+```javascript
+const eliminada = eliminarPorId(plantas, 3);
+console.log(eliminada);
+```
+
+El primer ejemplo elimina la planta con ID 3 si existe. El segundo comprueba qué sucede cuando no se encuentra el identificador.
+
+### 8. `mostrarEstadisticas(lista)`
+
+Calcula y muestra estadísticas sobre la altura de las plantas.
+
+Muestra:
+
+- La altura total de todas las plantas, en centímetros.
+- La altura media, con un decimal.
+- El nombre y la altura de la planta más alta.
+
+Si la lista está vacía, muestra un aviso y termina sin realizar los cálculos.
+
+Ejemplo:
+
+```javascript
+mostrarEstadisticas(plantas);
+```
+
+Con los datos iniciales, el resultado es:
+
+- Altura total: 455 cm.
+- Altura media: 45,5 cm.
+- Planta más alta: Monstera, con 80 cm.
+
+## Ejemplos de uso desde la consola
+
+Las siguientes instrucciones permiten probar las funciones de forma individual:
+
+```javascript
+// Listar todas las plantas con su clasificación por altura
 listarTodos(plantas);
 
-// Mostrar plantas saludables que midan al menos 50 cm
-// El resultado también devuelve la cantidad encontrada
+// Filtrar plantas saludables de 50 cm o más
 filtrar(plantas, 50);
 
-// Contar las plantas según su estado
+// Contar las plantas por categoría
 contarPorCategoria(plantas);
 
-// Mostrar id, nombre, altura y ubicación
+// Mostrar la lista de plantas
 listar(plantas);
 
-// Buscar por nombre, especie, ubicación o estado
+// Buscar plantas por texto
 buscarPorTexto(plantas, "salón");
-buscarPorTexto(plantas, "monstera");
 
-// Añadir una planta y mostrar la colección actualizada
-anadirPlanta(plantas, {
+// Mostrar estadísticas
+mostrarEstadisticas(plantas);
+```
+
+Para probar las operaciones que modifican la colección, ejecuta estas instrucciones por separado:
+
+```javascript
+// Añadir una planta
+anadir(plantas, {
     nombre: "Menta",
     especie: "Mentha",
-    fecha_adquisicion: "2026-10-14",
+    fecha_adquisicion: "2026-10-19",
     altura: 15,
     ubicacion: "Cocina",
     estado: "Saludable"
 });
-listar(plantas);
 
-// Eliminar la planta con id 3 y mostrar la colección actualizada
-eliminarPorId(plantas, 3);
+// Comprobar la colección
 listar(plantas);
 ```
 
-Los comandos que añaden o eliminan plantas modifican la colección mientras la página está abierta. Al recargarla, se recuperan los datos iniciales. Si quieres probar el ejemplo de eliminación sin perder una planta durante la sesión, puedes recargar la página después.
+```javascript
+// Eliminar una planta por su ID
+eliminarPorId(plantas, 3);
 
-## Tecnologías
+// Comprobar la colección
+listar(plantas);
+```
 
-- HTML5
-- JavaScript
+Los cambios se mantienen mientras la página esté abierta. Al recargarla, se recuperan los diez datos iniciales.
+
+## Tecnologías utilizadas
+
+- HTML5.
+- JavaScript.
+- Consola del navegador.
+- Git y GitHub para el control de versiones y la publicación del proyecto.
+
+## Uso de inteligencia artificial
+
+Se ha utilizado ChatGPT como apoyo para revisar y organizar el código, resolver errores y mejorar la documentación del proyecto.
+
