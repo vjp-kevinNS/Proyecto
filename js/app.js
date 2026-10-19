@@ -1,4 +1,16 @@
+// =====================================================
+// PROYECTO: MIS PLANTAS
+// DWEC - SPRINT 0
+// =====================================================
+
+
+// 1. CONSTANTES
+
 const NOMBRE_APP = "Mis Plantas";
+const LIMITE_ALTURA = 50;
+
+
+// 2. DATOS DE LAS PLANTAS
 
 const plantas = [
     {
@@ -96,9 +108,10 @@ const plantas = [
 console.log(`${NOMBRE_APP}: ${plantas.length} plantas cargadas`);
 console.table(plantas);
 
-// FUNCIÓN 1: LISTAR TODOS
 
-const LIMITE_ALTURA = 50;
+// =====================================================
+// 3. LISTAR TODAS LAS PLANTAS CON SU TAMAÑO
+// =====================================================
 
 function listarTodos(lista) {
     console.log("--- Todas las plantas ---");
@@ -109,13 +122,19 @@ function listarTodos(lista) {
             : "Grande";
 
         console.log(
-            `${planta.id}: ${planta.nombre} - ${planta.altura} cm - ${etiqueta}`
+            `${planta.id}: ${planta.nombre} - ` +
+            `${planta.altura} cm - ${etiqueta}`
         );
     }
 }
 
+// LLAMADA:
+// listarTodos(plantas);
 
-// FUNCIÓN 2: FILTRAR
+
+// =====================================================
+// 4. FILTRAR POR ALTURA Y ESTADO
+// =====================================================
 
 function filtrar(lista, limite) {
     let encontrados = 0;
@@ -123,7 +142,9 @@ function filtrar(lista, limite) {
     console.log(`--- Plantas de ${limite} cm o más y saludables ---`);
 
     for (const planta of lista) {
-        if (planta.altura >= limite && planta.estado === "Saludable") {
+        if (planta.altura >= limite &&
+            planta.estado === "Saludable") {
+
             console.log(
                 `${planta.nombre}: ${planta.altura} cm - ${planta.estado}`
             );
@@ -135,8 +156,14 @@ function filtrar(lista, limite) {
     return encontrados;
 }
 
+// LLAMADAS:
+// filtrar(plantas, 50);
+// filtrar(plantas, 60);
 
-// FUNCIÓN 3: CONTAR POR CATEGORÍA
+
+// =====================================================
+// 5. CONTAR PLANTAS POR CATEGORÍA
+// =====================================================
 
 function contarPorCategoria(lista) {
     let saludables = 0;
@@ -144,9 +171,7 @@ function contarPorCategoria(lista) {
     let necesitanCuidados = 0;
 
     for (const planta of lista) {
-
         switch (planta.estado) {
-
             case "Saludable":
                 saludables++;
                 break;
@@ -169,20 +194,16 @@ function contarPorCategoria(lista) {
     console.log(`Necesitan cuidados: ${necesitanCuidados}`);
 }
 
+// LLAMADA:
+// contarPorCategoria(plantas);
 
-// LLAMADAS
 
-listarTodos(plantas);
-
-const resultado50 = filtrar(plantas, 50);
-console.log(`Resultado con límite 50: ${resultado50}`);
-
-const resultado60 = filtrar(plantas, 60);
-console.log(`Resultado con límite 60: ${resultado60}`);
-
+// =====================================================
+// 6. LISTAR PLANTAS
+// =====================================================
 
 function listar(lista) {
-    console.log("--- Todas las plantas ---");
+    console.log("--- Lista de plantas ---");
 
     if (lista.length === 0) {
         console.log("No hay plantas en la colección.");
@@ -190,29 +211,47 @@ function listar(lista) {
     }
 
     for (const planta of lista) {
-        console.log(`${planta.id}: ${planta.nombre} - ${planta.altura} cm - ${planta.ubicacion}`);
+        console.log(
+            `${planta.id}: ${planta.nombre} - ` +
+            `${planta.altura} cm - ${planta.ubicacion}`
+        );
     }
 
     return lista;
 }
 
+// LLAMADA:
+// listar(plantas);
+
+
+// =====================================================
+// 7. BUSCAR PLANTAS POR TEXTO
+// =====================================================
+
 function buscarPorTexto(lista, texto) {
-    const textoBuscado = texto.toLowerCase().trim();
     const resultados = [];
 
-    console.log(`--- Búsqueda: ${texto} ---`);
-
-    if (!textoBuscado) {
+    if (typeof texto !== "string" || texto.trim() === "") {
         console.log("Debes escribir algo para buscar.");
         return resultados;
     }
 
+    const textoBuscado = texto.toLowerCase().trim();
+
+    console.log(`--- Búsqueda: ${texto} ---`);
+
     for (const planta of lista) {
-        const resumen = `${planta.nombre} ${planta.especie} ${planta.ubicacion} ${planta.estado}`.toLowerCase();
+        const resumen = (
+            `${planta.nombre} ${planta.especie} ` +
+            `${planta.ubicacion} ${planta.estado}`
+        ).toLowerCase();
 
         if (resumen.includes(textoBuscado)) {
             resultados.push(planta);
-            console.log(`${planta.id}: ${planta.nombre} - ${planta.especie}`);
+
+            console.log(
+                `${planta.id}: ${planta.nombre} - ${planta.especie}`
+            );
         }
     }
 
@@ -223,42 +262,120 @@ function buscarPorTexto(lista, texto) {
     return resultados;
 }
 
+// LLAMADAS:
+// buscarPorTexto(plantas, "MONSTERA");
+// buscarPorTexto(plantas, "salón");
+// buscarPorTexto(plantas, "cactus");
+
+
+// =====================================================
+// 8. AÑADIR UNA PLANTA
+// =====================================================
+
 function anadirPlanta(lista, nuevaPlanta) {
     console.log("--- Añadir planta ---");
 
-    if (!nuevaPlanta || typeof nuevaPlanta !== "object") {
+    if (!nuevaPlanta || typeof nuevaPlanta !== "object" ||
+        Array.isArray(nuevaPlanta)) {
         console.log("La planta nueva no es válida.");
-        return lista;
+        return null;
     }
 
-    const ultimaId = lista.length > 0 ? lista[lista.length - 1].id : 0;
-    const plantaConId = {
-        ...nuevaPlanta,
-        id: nuevaPlanta.id ?? ultimaId + 1
+    const mayorId = lista.reduce(
+        (mayor, planta) => Math.max(mayor, planta.id),
+        0
+    );
+
+    const nuevaPlanta = {
+        ...elemento,
+        id: mayorId + 1
     };
 
-    lista.push(plantaConId);
-    console.log(`Planta añadida: ${plantaConId.nombre}`);
+    lista.push(nuevaPlanta);
 
-    return lista;
+    console.log(`Planta añadida: ${nuevaPlanta.nombre}`);
+    console.log(`ID asignado: ${nuevaPlanta.id}`);
+
+    return nuevaPlanta.id;
 }
+
+// LLAMADA:
+// anadir(plantas, {
+//     nombre: "Menta",
+//     especie: "Mentha",
+//     fecha_adquisicion: "2026-10-19",
+//     altura: 15,
+//     ubicacion: "Cocina",
+//     estado: "Saludable"
+// });
+
+
+// =====================================================
+// 9. ELIMINAR UNA PLANTA POR ID
+// =====================================================
 
 function eliminarPorId(lista, id) {
-    console.log("--- Eliminar planta por id ---");
+    console.log("--- Eliminar planta ---");
 
-    const indice = lista.findIndex(planta => planta.id === id);
+    const indice = lista.findIndex(
+        planta => planta.id === id
+    );
 
     if (indice === -1) {
-        console.log(`No existe ninguna planta con id ${id}.`);
-        return lista;
+        console.log(`No existe ninguna planta con ID ${id}.`);
+        return false;
     }
 
-    const [eliminada] = lista.splice(indice, 1);
+    const eliminada = lista.splice(indice, 1)[0];
+
     console.log(`Planta eliminada: ${eliminada.nombre}`);
 
-    return lista;
+    return true;
 }
 
-listar(plantas);
+// LLAMADAS:
+// eliminarPorId(plantas, 10);
+// eliminarPorId(plantas, 99);
 
 
+// =====================================================
+// 10. MOSTRAR ESTADÍSTICAS
+// =====================================================
+
+function mostrarEstadisticas(lista) {
+    console.log("--- Estadísticas de las plantas ---");
+
+    if (lista.length === 0) {
+        console.log("No hay plantas para calcular estadísticas.");
+        return;
+    }
+
+    let totalAltura = 0;
+    let plantaMasAlta = lista[0];
+
+    for (const planta of lista) {
+        totalAltura += planta.altura;
+
+        if (planta.altura > plantaMasAlta.altura) {
+            plantaMasAlta = planta;
+        }
+    }
+
+    const mediaAltura = totalAltura / lista.length;
+
+    console.log(`Altura total: ${totalAltura} cm`);
+    console.log(`Altura media: ${mediaAltura.toFixed(1)} cm`);
+
+    console.log(
+        `Planta más alta: ${plantaMasAlta.nombre} ` +
+        `(${plantaMasAlta.altura} cm)`
+    );
+}
+
+// LLAMADA:
+// mostrarEstadisticas(plantas);
+
+
+// =====================================================
+// FIN DEL PROGRAMA
+// =====================================================
