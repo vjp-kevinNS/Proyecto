@@ -382,3 +382,28 @@ function mostrarEstadisticas(lista) {
 // =====================================================
 // FIN DEL PROGRAMA
 // =====================================================
+
+
+
+// =====================================================
+// RESUMEN DE FUNCIONES
+// =====================================================
+
+/* listarTodos(plantas);
+
+filtrar(plantas, 50);
+filtrar(plantas, 60);
+
+contarPorCategoria(plantas);
+
+listar(plantas);
+listar([]);
+
+buscarPorTexto(plantas, "MONSTERA");
+buscarPorTexto(plantas, "salón");
+buscarPorTexto(plantas, "cactus");
+buscarPorTexto(plantas, "dragón");
+buscarPorTexto(plantas, "");
+
+mostrarEstadisticas(plantas);
+mostrarEstadisticas([]); */
