@@ -275,8 +275,11 @@ function buscarPorTexto(lista, texto) {
 function anadirPlanta(lista, nuevaPlanta) {
     console.log("--- Añadir planta ---");
 
-    if (!nuevaPlanta || typeof nuevaPlanta !== "object" ||
-        Array.isArray(nuevaPlanta)) {
+    if (
+        !nuevaPlanta ||
+        typeof nuevaPlanta !== "object" ||
+        Array.isArray(nuevaPlanta)
+    ) {
         console.log("La planta nueva no es válida.");
         return null;
     }
@@ -286,21 +289,21 @@ function anadirPlanta(lista, nuevaPlanta) {
         0
     );
 
-    const nuevaPlanta = {
-        ...elemento,
+    const plantaConId = {
+        ...nuevaPlanta,
         id: mayorId + 1
     };
 
-    lista.push(nuevaPlanta);
+    lista.push(plantaConId);
 
-    console.log(`Planta añadida: ${nuevaPlanta.nombre}`);
-    console.log(`ID asignado: ${nuevaPlanta.id}`);
+    console.log(`Planta añadida: ${plantaConId.nombre}`);
+    console.log(`ID asignado: ${plantaConId.id}`);
 
-    return nuevaPlanta.id;
+    return plantaConId.id;
 }
 
-// LLAMADA:
-// anadir(plantas, {
+// LLAMADA DESDE LA CONSOLA:
+// anadirPlanta(plantas, {
 //     nombre: "Menta",
 //     especie: "Mentha",
 //     fecha_adquisicion: "2026-10-19",

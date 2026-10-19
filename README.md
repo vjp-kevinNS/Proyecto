@@ -6,8 +6,6 @@ Mis Plantas es una aplicación sencilla de JavaScript para consultar y gestionar
 
 La aplicación permite listar plantas, filtrarlas por altura y estado, contar sus categorías, buscar por texto, añadir y eliminar plantas y consultar estadísticas sobre sus alturas.
 
-No hay una interfaz para gestionar las plantas ni una base de datos. Los cambios realizados durante la sesión se pierden al recargar la página.
-
 ## Estructura del proyecto
 
 ```text
@@ -139,7 +137,7 @@ const resultados = buscarPorTexto(plantas, "salón");
 console.table(resultados);
 ```
 
-### 6. `anadir(lista, elemento)`
+### 6. `anadirPlanta(lista, nuevaPlanta)`
 
 Añade una planta nueva a la colección.
 
@@ -150,7 +148,7 @@ Si el elemento no es válido, muestra un mensaje y devuelve `null`.
 Ejemplo:
 
 ```javascript
-anadir(plantas, {
+anadirPlanta(plantas, {
     nombre: "Menta",
     especie: "Mentha",
     fecha_adquisicion: "2026-10-19",
@@ -243,7 +241,7 @@ Para probar las operaciones que modifican la colección, ejecuta estas instrucci
 
 ```javascript
 // Añadir una planta
-anadir(plantas, {
+anadirPlanta(plantas, {
     nombre: "Menta",
     especie: "Mentha",
     fecha_adquisicion: "2026-10-19",
@@ -276,4 +274,3 @@ Los cambios se mantienen mientras la página esté abierta. Al recargarla, se re
 ## Uso de inteligencia artificial
 
 Se ha utilizado ChatGPT como apoyo para revisar y organizar el código, resolver errores y mejorar la documentación del proyecto.
-
