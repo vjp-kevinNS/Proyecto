@@ -1,0 +1,30 @@
+body {
+    font-family: sans-serif;
+    margin: 0 2rem;
+}
+
+#listado {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.tarjeta {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px #0003;
+}
+
+/* Bordes de color según el estado de la planta */
+.tarjeta-saludable {
+    border-left: 5px solid green;
+}
+
+.tarjeta-necesita-agua {
+    border-left: 5px solid orange;
+}
+
+.tarjeta-necesita-cuidados {
+    border-left: 5px solid red;
+}

@@ -2,7 +2,7 @@
 
 ## Descripción
 
-Mis Plantas es una aplicación sencilla de JavaScript para consultar y gestionar una colección de plantas. La información se guarda en un array en memoria y las operaciones y resultados se muestran en la consola del navegador.
+Mis Plantas es una aplicación sencilla de JavaScript para consultar y gestionar una colección de plantas. La información se guarda en un array en memoria. La página muestra las plantas en tarjetas y las estadísticas de altura; también es posible probar las funciones desde la consola del navegador.
 
 La aplicación permite listar plantas, filtrarlas por altura y estado, contar sus categorías, buscar por texto, añadir y eliminar plantas y consultar estadísticas sobre sus alturas.
 
@@ -12,20 +12,21 @@ La aplicación permite listar plantas, filtrarlas por altura y estado, contar su
 Proyecto/
 ├── index.html
 ├── README.md
+├── css/
+│   └── estilos.css
 └── js/
     └── app.js
 ```
 
-El archivo `index.html` carga `js/app.js` mediante la etiqueta `<script src="js/app.js" defer></script>`.
+El archivo `index.html` carga `js/app.js` mediante la etiqueta `<script src="js/app.js" defer></script>` y los estilos desde `css/estilos.css`.
 
 ## Cómo ejecutar la aplicación
 
 1. Abre la carpeta del proyecto en tu editor de código.
 2. Abre `index.html` en un navegador, por ejemplo, mediante doble clic o utilizando Live Server.
-3. Abre las herramientas de desarrollador con `F12`.
-4. Entra en la pestaña Console para ver los resultados y probar las funciones.
+3. La página muestra las tarjetas y las estadísticas. Para probar las funciones, abre las herramientas de desarrollador con `F12` y entra en la pestaña Console.
 
-La aplicación funciona desde la consola del navegador. No necesita una base de datos ni una interfaz gráfica.
+No necesita una base de datos.
 
 ## Datos de la colección
 
@@ -118,7 +119,7 @@ listar(plantas);
 
 Busca un texto en el nombre, la especie, la ubicación y el estado de las plantas.
 
-La búsqueda no distingue entre mayúsculas y minúsculas y elimina los espacios al principio y al final del texto introducido.
+La búsqueda no distingue entre mayúsculas ni tildes y elimina los espacios al principio y al final del texto introducido.
 
 Devuelve un array con las plantas encontradas. Si el texto está vacío o no hay coincidencias, muestra un mensaje y devuelve un array vacío.
 
