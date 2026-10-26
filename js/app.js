@@ -249,7 +249,53 @@ function pintar(lista) {
 }
 
 // =====================================================
-// 6. INICIALIZACION
+// . BUSCADOR Y ORDEN EN LA PAGINA
+// =====================================================
+
+let textoBuscado = "";
+let criterio = "original";
+
+function actualizar() {
+    const coincidencias = textoBuscado.trim() === ""
+        ? plantas.slice()
+        : buscarPorTexto(plantas, textoBuscado);
+    let resultado = coincidencias;
+
+    switch (criterio) {
+        case "nombre":
+            resultado = coincidencias.slice().sort((a, b) =>
+                a.nombre.localeCompare(b.nombre, "es", { sensitivity: "base" })
+            );
+            break;
+        case "alturaAsc":
+            resultado = coincidencias.slice().sort((a, b) => a.altura - b.altura);
+            break;
+        case "alturaDesc":
+            resultado = coincidencias.slice().sort((a, b) => b.altura - a.altura);
+            break;
+    }
+
+    pintar(resultado);
+}
+
+const buscador = document.querySelector("#buscador");
+buscador.addEventListener("input", () => {
+    textoBuscado = buscador.value;
+    actualizar();
+});
+
+for (const boton of document.querySelectorAll("[data-criterio]")) {
+    boton.addEventListener("click", () => {
+        criterio = boton.dataset.criterio;
+        for (const otroBoton of document.querySelectorAll("[data-criterio]")) {
+            otroBoton.setAttribute("aria-pressed", String(otroBoton === boton));
+        }
+        actualizar();
+    });
+}
+
+// =====================================================
+// 7. INICIALIZACION
 // =====================================================
 
 pintar(plantas);

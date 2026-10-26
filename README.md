@@ -48,6 +48,17 @@ La constante `NOMBRE_APP` contiene el nombre de la aplicación (`Mis Plantas`). 
 
 Al cargar la página, los datos iniciales se muestran mediante `console.table()`.
 
+## Búsqueda y orden en la página
+
+El campo «Buscar plantas» filtra las tarjetas mientras escribes, sin distinguir
+entre mayúsculas y minúsculas. Busca en el nombre, la especie, la ubicación y el
+estado. Los botones permiten mostrar la colección en su orden original o
+ordenarla por nombre y altura.
+
+La búsqueda y el orden se pueden combinar. Al borrar el texto vuelven a aparecer
+todas las plantas según el orden seleccionado. Estas operaciones no modifican
+el array original `plantas`.
+
 ## Funciones
 
 Todas las funciones pueden probarse desde la consola del navegador. Para utilizarlas, escribe la llamada correspondiente y pulsa Intro.

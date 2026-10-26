@@ -12,6 +12,17 @@
     </header>
    
     <p id="estadisticas"></p>
+
+    <section class="controles" aria-label="Buscar y ordenar plantas">
+        <label for="buscador">Buscar plantas</label>
+        <input id="buscador" type="search" placeholder="Nombre, especie, ubicación o estado">
+        <div class="ordenes" aria-label="Ordenar plantas">
+            <button type="button" data-criterio="original" aria-pressed="true">Orden original</button>
+            <button type="button" data-criterio="nombre" aria-pressed="false">Nombre A-Z</button>
+            <button type="button" data-criterio="alturaAsc" aria-pressed="false">Altura menor a mayor</button>
+            <button type="button" data-criterio="alturaDesc" aria-pressed="false">Altura mayor a menor</button>
+        </div>
+    </section>
    
     <main id="listado"></main>
 

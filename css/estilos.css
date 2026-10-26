@@ -3,6 +3,35 @@ body {
     margin: 0 2rem;
 }
 
+.controles {
+    display: grid;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    max-width: 42rem;
+}
+
+#buscador {
+    font: inherit;
+    padding: 0.6rem;
+}
+
+.ordenes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.ordenes button {
+    cursor: pointer;
+    font: inherit;
+    padding: 0.5rem 0.75rem;
+}
+
+.ordenes button[aria-pressed="true"] {
+    background: #e2f0e2;
+    border-color: green;
+}
+
 #listado {
     display: grid;
     gap: 1rem;
