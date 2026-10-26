@@ -7,6 +7,9 @@
 const NOMBRE_APP = "Mis Plantas";
 const LIMITE_ALTURA = 50;
 
+let textoBuscado = "";
+let criterio = "ninguno";
+
 const plantas = [
     { id: 1, nombre: "Monstera", especie: "Monstera deliciosa", fecha_adquisicion: "2026-10-05", altura: 80, ubicacion: "Salon", estado: "Saludable" },
     { id: 2, nombre: "Poto", especie: "Epipremnum aureum", fecha_adquisicion: "2026-09-21", altura: 45, ubicacion: "Dormitorio", estado: "Saludable" },
@@ -249,54 +252,66 @@ function pintar(lista) {
 }
 
 // =====================================================
-// 6. BUSCADOR Y ORDEN EN LA PAGINA
+// 6. INICIALIZACION
 // =====================================================
 
-let textoBuscado = "";
-let criterio = "original";
+pintar(plantas);
+pintarEstadisticas(plantas);
 
-function actualizar() {
-    const coincidencias = textoBuscado.trim() === ""
-        ? plantas.slice()
-        : buscarPorTexto(plantas, textoBuscado);
-    let resultado = coincidencias;
 
-    switch (criterio) {
-        case "nombre":
-            resultado = coincidencias.slice().sort((a, b) =>
-                a.nombre.localeCompare(b.nombre, "es", { sensitivity: "base" })
-            );
-            break;
-        case "alturaAsc":
-            resultado = coincidencias.slice().sort((a, b) => a.altura - b.altura);
-            break;
-        case "alturaDesc":
-            resultado = coincidencias.slice().sort((a, b) => b.altura - a.altura);
-            break;
+// =====================================================
+// 7. ORDENAR
+// =====================================================
+
+function ordenar(lista,criterio){
+    const resultado = [...lista];
+
+    if(criterio === "nombre"){
+        resultado.sort((a, b)=>
+            a.nombre.localCompare(b.nombre)
+        );
+    } else if (criterio === "altura"){
+        resultado.sort((a, b) => a.altura - b.altura);
     }
 
-    pintar(resultado);
+    return resultado;
 }
 
-const buscador = document.querySelector("#buscador");
-buscador.addEventListener("input", () => {
-    textoBuscado = buscador.value;
+// =====================================================
+// 8. ACTUALIZAR
+// =====================================================
+
+function actualizar(){
+    let resultado = plantas;
+
+    if (textoBuscado !== ""){
+        resultado = buscarPorTexto(plantas, textoBuscado);
+    }
+
+    resultado = ordenar(resultado, criterio);
+
+    pintar(resultado);
+    pintarEstadisticas(resultado);
+}
+
+// =====================================================
+// 9. EVENTOS
+// =====================================================
+
+document.querySelector("#buscador").addEventListener("input", function () {
+    textoBuscado = this.value;
     actualizar();
 });
 
-for (const boton of document.querySelectorAll("[data-criterio]")) {
-    boton.addEventListener("click", () => {
-        criterio = boton.dataset.criterio;
-        for (const otroBoton of document.querySelectorAll("[data-criterio]")) {
-            otroBoton.setAttribute("aria-pressed", String(otroBoton === boton));
-        }
-        actualizar();
-    });
-}
+document.querySelector("#ordenNombre").addEventListener("click", function () {
+    criterio = "nombre";
+    actualizar();
+});
 
-// =====================================================
-// 7. INICIALIZACION
-// =====================================================
+document.querySelector("#ordenNumero").addEventListener("click", function () {
+    criterio = "altura";
+    actualizar();
+});
 
 pintar(plantas);
 pintarEstadisticas(plantas);
