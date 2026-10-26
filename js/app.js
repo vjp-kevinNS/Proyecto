@@ -268,7 +268,7 @@ function ordenar(lista,criterio){
 
     if(criterio === "nombre"){
         resultado.sort((a, b)=>
-            a.nombre.localCompare(b.nombre)
+            a.nombre.localeCompare(b.nombre)
         );
     } else if (criterio === "altura"){
         resultado.sort((a, b) => a.altura - b.altura);

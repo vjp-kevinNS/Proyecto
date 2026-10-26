@@ -3,6 +3,39 @@ body {
     margin: 0 2rem;
 }
 
+.leyenda-colores ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    list-style: none;
+    padding: 0;
+}
+
+.leyenda-colores li {
+    align-items: center;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.indicador-color {
+    border-radius: 50%;
+    display: inline-block;
+    height: 0.85rem;
+    width: 0.85rem;
+}
+
+.indicador-color.saludable {
+    background-color: green;
+}
+
+.indicador-color.necesita-agua {
+    background-color: orange;
+}
+
+.indicador-color.necesita-cuidados {
+    background-color: red;
+}
+
 .controles {
     display: grid;
     gap: 0.5rem;

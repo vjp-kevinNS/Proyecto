@@ -2,7 +2,7 @@
 
 ## Descripción
 
-Mis Plantas es una aplicación sencilla de JavaScript para consultar y gestionar una colección de plantas. La información se guarda en un array en memoria. La página muestra las plantas en tarjetas y las estadísticas de altura; también es posible probar las funciones desde la consola del navegador.
+Mis Plantas es una aplicación sencilla de JavaScript para consultar y gestionar una colección de plantas. La información se guarda en un array en memoria. La página muestra las plantas en tarjetas, estadísticas de altura, un buscador y controles para ordenar la colección. También es posible probar las funciones desde la consola del navegador.
 
 La aplicación permite listar plantas, filtrarlas por altura y estado, contar sus categorías, buscar por texto, añadir y eliminar plantas y consultar estadísticas sobre sus alturas.
 
@@ -48,16 +48,49 @@ La constante `NOMBRE_APP` contiene el nombre de la aplicación (`Mis Plantas`). 
 
 Al cargar la página, los datos iniciales se muestran mediante `console.table()`.
 
-## Búsqueda y orden en la página
+## Búsqueda, orden y colores en la página
 
-El campo «Buscar plantas» filtra las tarjetas mientras escribes, sin distinguir
-entre mayúsculas y minúsculas. Busca en el nombre, la especie, la ubicación y el
-estado. Los botones permiten mostrar la colección en su orden original o
-ordenarla por nombre y altura.
+El campo «Buscar planta...» filtra las tarjetas mientras escribes. Busca en el
+nombre, la especie, la ubicación y el estado; no distingue entre mayúsculas,
+minúsculas ni tildes. Si no hay coincidencias, no se muestran tarjetas. Al
+borrar el texto, se muestran de nuevo todas las plantas.
 
-La búsqueda y el orden se pueden combinar. Al borrar el texto vuelven a aparecer
-todas las plantas según el orden seleccionado. Estas operaciones no modifican
-el array original `plantas`.
+Los botones permiten ordenar las tarjetas por nombre (A-Z) o por altura de menor
+a mayor. La búsqueda y el orden se pueden combinar: el orden se aplica a los
+resultados de la búsqueda. Las funciones `buscarPorTexto(lista, texto)` y
+`ordenar(lista, criterio)` realizan estas operaciones por separado; `actualizar()`
+las combina para refrescar las tarjetas y las estadísticas. El ordenamiento
+trabaja sobre una copia, por lo que no cambia el array original `plantas`.
+
+La leyenda de colores identifica el estado de cada planta mediante el borde de
+su tarjeta:
+
+| Color | Estado |
+|---|---|
+| Verde | Saludable |
+| Naranja | Necesita agua |
+| Rojo | Necesita cuidados |
+
+## Funciones de orden de la página
+
+### `ordenar(lista, criterio)`
+
+Devuelve una copia ordenada de la lista. Acepta los criterios `"nombre"` (A-Z) y
+`"altura"` (de menor a mayor). No modifica la lista recibida.
+
+Ejemplos:
+
+```javascript
+ordenar(plantas, "nombre");
+ordenar(plantas, "altura");
+```
+
+### `actualizar()`
+
+Lee el texto actual del buscador y el criterio seleccionado, aplica la búsqueda
+y el orden, y actualiza las tarjetas, el resumen y las estadísticas de la
+página. Se ejecuta automáticamente al escribir o pulsar uno de los botones de
+orden.
 
 ## Funciones
 
@@ -244,6 +277,10 @@ listar(plantas);
 
 // Buscar plantas por texto
 buscarPorTexto(plantas, "salón");
+
+// Ordenar plantas sin cambiar el array original
+ordenar(plantas, "nombre");
+ordenar(plantas, "altura");
 
 // Mostrar estadísticas
 mostrarEstadisticas(plantas);
