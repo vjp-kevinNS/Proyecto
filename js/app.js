@@ -281,10 +281,11 @@ function ordenar(lista,criterio){
 // 8. ACTUALIZAR
 // =====================================================
 
-function actualizar(){
+
+function actualizar() {
     let resultado = plantas;
 
-    if (textoBuscado !== ""){
+    if (textoBuscado.trim() !== "") {
         resultado = buscarPorTexto(plantas, textoBuscado);
     }
 
@@ -292,6 +293,7 @@ function actualizar(){
 
     pintar(resultado);
     pintarEstadisticas(resultado);
+    pintarResumen(resultado.length);
 }
 
 // =====================================================
@@ -315,3 +317,18 @@ document.querySelector("#ordenNumero").addEventListener("click", function () {
 
 pintar(plantas);
 pintarEstadisticas(plantas);
+
+
+// =====================================================
+// 9. MOSTRAR X DE Y
+// =====================================================
+
+function pintarResumen(mostrados){
+    const resumen = document.querySelector("#resumen");
+
+    if(mostrados > 0){
+        resumen.textContent = `Mostrando ${mostrados} de ${plantas.length} plantas`;
+    } else {
+        resumen.textContent = `No hay plantas que contengan "${textoBuscado}"`;
+    }
+}
