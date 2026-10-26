@@ -249,7 +249,7 @@ function pintar(lista) {
 }
 
 // =====================================================
-// . BUSCADOR Y ORDEN EN LA PAGINA
+// 6. BUSCADOR Y ORDEN EN LA PAGINA
 // =====================================================
 
 let textoBuscado = "";
