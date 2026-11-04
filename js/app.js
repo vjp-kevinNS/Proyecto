@@ -8,6 +8,7 @@
 
 const NOMBRE_APP = "Mis Plantas";
 const LIMITE_ALTURA = 50;
+const DIAS_RECIENTE = 30;
 
 let textoBuscado = "";
 let criterio = "ninguno";
@@ -271,13 +272,26 @@ function crearTarjeta(elemento) {
 
     tarjeta.classList.add(claseEstado);
 
+    // Creamos el título.
     const titulo = document.createElement("h3");
     titulo.textContent = elemento.nombre;
 
+    // Creamos los datos de la planta.
     const datos = document.createElement("p");
     datos.textContent = `${elemento.especie} · ${elemento.altura} cm · ${elemento.ubicacion}`;
 
-    tarjeta.append(titulo, datos);
+    // Creamos el párrafo con la fecha de adquisición.
+    const fecha = document.createElement("p");
+    fecha.classList.add("fecha");
+    fecha.textContent = fechaLegible(elemento.fecha_adquisicion);
+
+    // Comprobamos si la planta es reciente.
+    if (diasDesde(elemento.fecha_adquisicion) <= DIAS_RECIENTE) {
+        tarjeta.classList.add("reciente");
+    }
+
+    // Añadimos todos los elementos a la tarjeta.
+    tarjeta.append(titulo, datos, fecha);
 
     return tarjeta;
 }
@@ -315,6 +329,12 @@ function ordenar(lista, criterio) {
     } else if (criterio === "altura") {
         // Orden numérico de menor a mayor.
         resultado.sort((a, b) => a.altura - b.altura);
+
+    } else if (criterio === "fecha") {
+        // Orden por fecha, de más reciente a más antigua.
+        resultado.sort((a, b) =>
+            crearFecha(b.fecha_adquisicion) - crearFecha(a.fecha_adquisicion)
+        );
     }
 
     return resultado;
@@ -432,3 +452,38 @@ criterio = ordenGuardado ?? "ninguno";
 
 // Mostramos las plantas aplicando el orden recuperado.
 actualizar();
+
+// =====================================================
+// 13. FUNCIONES PARA TRABAJAR CON FECHAS
+// =====================================================
+
+function crearFecha(texto) {
+    return new Date(texto + "T00:00:00");
+}
+
+function fechaLegible(texto) {
+    return crearFecha(texto).toLocaleDateString("es-ES", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
+}
+
+function diasDesde(texto) {
+    const MS_DIA = 24 * 60 * 60 * 1000;
+
+    const ahora = new Date();
+
+    ahora.setHours(0, 0, 0, 0);
+
+    const diferencia = ahora.getTime() - crearFecha(texto).getTime();
+
+    return Math.floor(diferencia / MS_DIA);
+}
+// =====================================================
+// 14. EVENTO PARA ORDENAR POR FECHA
+// =====================================================
+
+// Botón para ordenar por fecha de adquisición.
+document.querySelector("#ordenFecha")
+    .addEventListener("click", () => elegirOrden("fecha"));

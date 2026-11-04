@@ -90,3 +90,14 @@ body {
 .tarjeta-necesita-cuidados {
     border-left: 5px solid red;
 }
+
+/* Plantas adquiridas recientemente */
+.reciente {
+    border-left: 6px solid #0ddacc;
+}
+
+/* Estilo de la fecha */
+.fecha {
+    color: #6b7785;
+    font-size: 0.9rem;
+}
