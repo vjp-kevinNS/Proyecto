@@ -116,6 +116,12 @@ function anadirPlanta(lista, nuevaPlanta) {
         return null;
     }
 
+    // Comprobamos que el nombre cumple el patrón Regex.
+    if (!PATRON_NOMBRE.test(nuevaPlanta.nombre)) {
+        console.error("El nombre de la planta no es válido.");
+        return null;
+    }
+
     const camposTexto = [
         "nombre",
         "especie",
@@ -441,20 +447,7 @@ document.querySelector("#ordenNumero")
 
 
 // =====================================================
-// 12. INICIALIZACIÓN
-// =====================================================
-
-// Recuperamos el último orden guardado en la cookie.
-const ordenGuardado = leerCookie("orden");
-
-// Si no hay cookie, comenzamos sin ordenar.
-criterio = ordenGuardado ?? "ninguno";
-
-// Mostramos las plantas aplicando el orden recuperado.
-actualizar();
-
-// =====================================================
-// 13. FUNCIONES PARA TRABAJAR CON FECHAS
+// 12. FUNCIONES PARA TRABAJAR CON FECHAS
 // =====================================================
 
 function crearFecha(texto) {
@@ -481,9 +474,68 @@ function diasDesde(texto) {
     return Math.floor(diferencia / MS_DIA);
 }
 // =====================================================
-// 14. EVENTO PARA ORDENAR POR FECHA
+// 13. EVENTO PARA ORDENAR POR FECHA
 // =====================================================
 
 // Botón para ordenar por fecha de adquisición.
 document.querySelector("#ordenFecha")
     .addEventListener("click", () => elegirOrden("fecha"));
+
+// =====================================================
+// 14. VALIDACIÓN DEL NOMBRE CON REGEX
+// =====================================================
+
+// Permite letras, espacios, guiones y apóstrofes.
+const PATRON_NOMBRE = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+(?:[ '-][A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+)*$/;
+
+// =====================================================
+// 15. FORMULARIO PARA AÑADIR PLANTAS
+// =====================================================
+
+document.querySelector("#formulario")
+    .addEventListener("submit", function (evento) {
+
+        evento.preventDefault();
+
+        const nuevaPlanta = {
+            nombre: document.querySelector("#nombrePlanta").value.trim(),
+            especie: document.querySelector("#especiePlanta").value.trim(),
+            fecha_adquisicion: document.querySelector("#fechaPlanta").value,
+            altura: Number(document.querySelector("#alturaPlanta").value),
+            ubicacion: document.querySelector("#ubicacionPlanta").value.trim(),
+            estado: document.querySelector("#estadoPlanta").value
+        };
+
+        const aviso = document.querySelector("#avisoFormulario");
+
+        // Intentamos añadir la planta.
+        const resultado = anadirPlanta(plantas, nuevaPlanta);
+
+        if (resultado === null) {
+            aviso.textContent = "El nombre no es válido o faltan datos. Revisa el formulario.";
+            aviso.style.color = "red";
+            return;
+        }
+
+        aviso.textContent = "¡Planta añadida correctamente!";
+        aviso.style.color = "green";
+
+        // Actualizamos las tarjetas y estadísticas.
+        actualizar();
+
+        // Limpiamos el formulario.
+        this.reset();
+    });
+
+// =====================================================
+// INICIALIZACIÓN
+// =====================================================
+
+// Recuperamos el último orden guardado en la cookie.
+const ordenGuardado = leerCookie("orden");
+
+// Si no hay cookie, comenzamos sin ordenar.
+criterio = ordenGuardado ?? "ninguno";
+
+// Mostramos las plantas aplicando el orden recuperado.
+actualizar();

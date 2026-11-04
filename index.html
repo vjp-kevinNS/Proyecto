@@ -1,37 +1,98 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Mis Plantas</title>
-    <link rel="stylesheet" href="css/estilos.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body>
     <header>
-        <h1 id="titulo">Mis Plantas</h1>
-        <p id="resumen"></p>
+      <h1 id="titulo">Mis Plantas</h1>
+      <p id="resumen"></p>
     </header>
 
     <p id="estadisticas"></p>
 
     <section class="leyenda-colores" aria-labelledby="titulo-leyenda">
-        <h2 id="titulo-leyenda">Leyenda de colores</h2>
-        <ul>
-            <li><span class="indicador-color saludable" aria-hidden="true"></span> Verde: planta saludable</li>
-            <li><span class="indicador-color necesita-agua" aria-hidden="true"></span> Naranja: necesita agua</li>
-            <li><span class="indicador-color necesita-cuidados" aria-hidden="true"></span> Rojo: necesita cuidados</li>
-        </ul>
+      <h2 id="titulo-leyenda">Leyenda de colores</h2>
+      <ul>
+        <li>
+          <span class="indicador-color saludable" aria-hidden="true"></span>
+          Verde: planta saludable
+        </li>
+        <li>
+          <span class="indicador-color necesita-agua" aria-hidden="true"></span>
+          Naranja: necesita agua
+        </li>
+        <li>
+          <span
+            class="indicador-color necesita-cuidados"
+            aria-hidden="true"
+          ></span>
+          Rojo: necesita cuidados
+        </li>
+      </ul>
     </section>
 
     <section>
-        <input id="buscador" type="search" placeholder="Buscar planta...">
-        <button id="ordenNombre">Ordenar A-Z</button>
-        <button id="ordenNumero">Ordenar por altura</button>
-        <button id="ordenFecha">Más recientes primero</button>
-        <button id="ordenFecha">Más recientes primero</button>
+      <input id="buscador" type="search" placeholder="Buscar planta..." />
+      <button id="ordenNombre">Ordenar A-Z</button>
+      <button id="ordenNumero">Ordenar por altura</button>
+      <button id="ordenFecha">Más recientes primero</button>
+    </section>
+
+    <!-- Formulario para añadir plantas -->
+    <section id="formulario-plantas">
+      <h2>Añadir una nueva planta</h2>
+
+      <form id="formulario">
+        <p>
+          <label for="nombrePlanta">Nombre:</label>
+          <input
+            type="text"
+            id="nombrePlanta"
+            placeholder="Ejemplo: Monstera"
+            required
+          />
+        </p>
+
+        <p>
+          <label for="especiePlanta">Especie:</label>
+          <input type="text" id="especiePlanta" required />
+        </p>
+
+        <p>
+          <label for="fechaPlanta">Fecha de adquisición:</label>
+          <input type="date" id="fechaPlanta" required />
+        </p>
+
+        <p>
+          <label for="alturaPlanta">Altura (cm):</label>
+          <input type="number" id="alturaPlanta" min="0" required />
+        </p>
+
+        <p>
+          <label for="ubicacionPlanta">Ubicación:</label>
+          <input type="text" id="ubicacionPlanta" required />
+        </p>
+
+        <p>
+          <label for="estadoPlanta">Estado:</label>
+          <select id="estadoPlanta" required>
+            <option value="Saludable">Saludable</option>
+            <option value="Necesita agua">Necesita agua</option>
+            <option value="Necesita cuidados">Necesita cuidados</option>
+          </select>
+        </p>
+
+        <button type="submit">Añadir planta</button>
+
+        <p id="avisoFormulario"></p>
+      </form>
     </section>
 
     <main id="listado"></main>
 
     <script src="js/app.js" defer></script>
-</body>
+  </body>
 </html>

@@ -81,6 +81,17 @@ Se ha incorporado la gestión de fechas de adquisición de las plantas con las s
 
 Para implementar estas funcionalidades se han utilizado objetos `Date`, el método `toLocaleDateString()`, operaciones con fechas y clases CSS dinámicas.
 
+### Validación de datos mediante expresiones regulares
+
+Se ha incorporado una validación mediante Regex para comprobar
+que el nombre de las plantas contiene únicamente letras,
+espacios, guiones y apóstrofes.
+
+- Se utiliza el patrón `PATRON_NOMBRE`.
+- Se comprueba el nombre mediante el método `.test()`.
+- Si el nombre no cumple el patrón, se muestra un mensaje
+  de error y se impide añadir la planta.
+
 ## Funciones de orden de la página
 
 ### `ordenar(lista, criterio)`
@@ -406,7 +417,7 @@ Se ha utilizado ChatGPT como apoyo para revisar y organizar el código, resolver
 
 ## Reparto del trabajo
 
-El proyecto Mis Plantas se ha desarrollado de forma conjunta por Kevin Núñez Sánchez y Javier Becerro Batuecas.
+El proyecto Mis Plantas se ha desarrollado conjuntamente por Kevin Núñez Sánchez y Javier Becerro Batuecas.
 
 ### Kevin Núñez Sánchez
 
@@ -418,19 +429,20 @@ Tareas realizadas:
 - Implementación del buscador por nombre, especie, ubicación y estado.
 - Desarrollo de las funciones para añadir y eliminar plantas.
 - Implementación de estadísticas: altura total, media, planta más alta y más baja.
-- Creación de tarjetas dinámicas para mostrar las plantas en la página web.
+- Creación de tarjetas dinámicas para mostrar las plantas en la interfaz web.
 - Aplicación de estilos visuales según el estado de cada planta.
 - Implementación de la ordenación alfabética y por altura.
 - Gestión de cookies para guardar y recuperar el último criterio de ordenación.
 - Incorporación de fechas de adquisición en las tarjetas.
-- Identificación visual de las plantas adquiridas recientemente.
+- Identificación visual de las plantas adquiridas durante los últimos 30 días.
 - Implementación de la ordenación por fecha de adquisición.
+- Incorporación de validación mediante expresiones regulares (Regex) para comprobar los nombres de las plantas.
 
 ### Javier Becerro Batuecas
 
-Tareas restantes del desarrollo y documentación:
+Colaboración en las restantes tareas de desarrollo del proyecto:
 
-- Desarrollo de las funcionalidades complementarias del proyecto.
+- Desarrollo de funcionalidades complementarias.
 - Colaboración en la estructura y organización de la aplicación.
 - Revisión y comprobación del funcionamiento general.
 - Integración de los diferentes apartados del proyecto.
