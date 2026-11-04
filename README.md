@@ -23,8 +23,12 @@ El archivo `index.html` carga `js/app.js` mediante la etiqueta `<script src="js/
 ## Cómo ejecutar la aplicación
 
 1. Abre la carpeta del proyecto en tu editor de código.
-2. Abre `index.html` en un navegador, por ejemplo, mediante doble clic o utilizando Live Server.
-3. La página muestra las tarjetas y las estadísticas. Para probar las funciones, abre las herramientas de desarrollador con `F12` y entra en la pestaña Console.
+2. Abre `index.html` utilizando Live Server desde Visual Studio Code.
+3. La aplicación se abrirá en el navegador mediante una dirección HTTP, por ejemplo `http://127.0.0.1:5500`.
+4. La página muestra las tarjetas, las estadísticas, el buscador y los botones de ordenación.
+5. Para probar las funciones, abre las herramientas de desarrollador con `F12` y entra en la pestaña Console.
+
+Se recomienda utilizar Live Server para que las cookies funcionen correctamente. No es recomendable abrir directamente el archivo mediante `file://`.
 
 No necesita una base de datos.
 
@@ -47,6 +51,8 @@ Los estados utilizados en los datos iniciales son `Saludable`, `Necesita agua` y
 La constante `NOMBRE_APP` contiene el nombre de la aplicación (`Mis Plantas`). La constante `LIMITE_ALTURA` establece el límite de 50 cm utilizado por `listarTodos` para clasificar las plantas como pequeñas o grandes.
 
 Al cargar la página, los datos iniciales se muestran mediante `console.table()`.
+
+La cookie únicamente guarda el criterio de ordenación. No almacena los cambios realizados en la colección, por lo que al recargar la página se recuperan los diez datos iniciales.
 
 ## Búsqueda, orden y colores en la página
 
@@ -87,10 +93,53 @@ ordenar(plantas, "altura");
 
 ### `actualizar()`
 
-Lee el texto actual del buscador y el criterio seleccionado, aplica la búsqueda
-y el orden, y actualiza las tarjetas, el resumen y las estadísticas de la
-página. Se ejecuta automáticamente al escribir o pulsar uno de los botones de
-orden.
+Lee el texto actual del buscador y el criterio de ordenación seleccionado.
+
+Realiza las siguientes operaciones:
+
+1. Aplica la búsqueda mediante `buscarPorTexto()`, si se ha introducido algún texto.
+2. Ordena los resultados mediante `ordenar()`.
+3. Actualiza las tarjetas de plantas mediante `pintar()`.
+4. Actualiza las estadísticas mediante `pintarEstadisticas()`.
+5. Actualiza el resumen de resultados mediante `pintarResumen()`.
+
+Se ejecuta automáticamente al escribir en el buscador, pulsar los botones de ordenación y al iniciar la aplicación.
+
+### `guardarCookie(nombre, valor, dias)`
+
+Guarda información en una cookie del navegador.
+
+Recibe tres parámetros:
+
+- `nombre`: nombre de la cookie.
+- `valor`: información que queremos guardar.
+- `dias`: duración de la cookie en días.
+
+Utiliza `document.cookie` para almacenar la información. En este proyecto se utiliza para guardar el último criterio de ordenación seleccionado durante 30 días.
+
+### `leerCookie(nombre)`
+
+Permite recuperar el valor de una cookie almacenada.
+
+Lee las cookies del navegador, busca la que coincide con el nombre indicado y devuelve su valor. Si no encuentra la cookie, devuelve `null`.
+
+### `elegirOrden(nuevo)`
+
+Gestiona el criterio de ordenación seleccionado por el usuario.
+
+1. Actualiza la variable `criterio`.
+2. Guarda el criterio seleccionado mediante `guardarCookie()`.
+3. Llama a `actualizar()` para mostrar las plantas ordenadas.
+
+Los criterios utilizados son `nombre` y `altura`.
+
+### Persistencia del orden
+
+La aplicación recuerda el último orden seleccionado mediante una cookie llamada `orden`.
+
+Cuando se carga la página, se utiliza `leerCookie("orden")` para recuperar el criterio guardado. Si no existe ninguna cookie, se utiliza el criterio `ninguno`.
+
+La cookie tiene una duración de 30 días. De esta forma, al recargar la página se mantiene el orden seleccionado anteriormente.
 
 ## Funciones
 
@@ -181,6 +230,22 @@ Para guardar los resultados:
 const resultados = buscarPorTexto(plantas, "salón");
 console.table(resultados);
 ```
+
+### `pintarResumen(mostrados)`
+
+Muestra un resumen de los resultados que aparecen en la página.
+
+Recibe el número de plantas mostradas y comprueba si existen resultados.
+
+- Si hay plantas, muestra cuántas se están mostrando respecto al total de la colección.
+- Si no hay resultados, muestra un mensaje indicando que no existen plantas que contengan el texto buscado.
+
+Ejemplos de mensajes:
+
+- `Mostrando 4 de 10 plantas`.
+- `No hay plantas que contengan "xyz"`.
+
+Esta función actualiza el elemento HTML con el identificador `resumen`.
 
 ### 6. `anadirPlanta(lista, nuevaPlanta)`
 
@@ -309,17 +374,29 @@ eliminarPorId(plantas, 3);
 
 // Comprobar la colección
 listar(plantas);
-```
 
 Los cambios se mantienen mientras la página esté abierta. Al recargarla, se recuperan los diez datos iniciales.
 
-## Tecnologías utilizadas
+// Comprobar el resumen de resultados
+pintarResumen(plantas.length);
+
+// Consultar las cookies del navegador
+document.cookie;
+
+// Recuperar el último criterio de ordenación
+leerCookie("orden");
+
+// Guardar un criterio de ordenación
+guardarCookie("orden", "altura", 30);
+```
+
+### Tecnologías utilizadas
 
 - HTML5.
 - JavaScript.
 - Consola del navegador.
 - Git y GitHub para el control de versiones y la publicación del proyecto.
 
-## Uso de inteligencia artificial
+### Uso de inteligencia artificial
 
 Se ha utilizado ChatGPT como apoyo para revisar y organizar el código, resolver errores y mejorar la documentación del proyecto.
