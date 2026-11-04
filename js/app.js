@@ -1,8 +1,10 @@
+
 // =====================================================
 // PROYECTO: MIS PLANTAS
 // =====================================================
 
 // 1. CONSTANTES Y DATOS
+// =====================================================
 
 const NOMBRE_APP = "Mis Plantas";
 const LIMITE_ALTURA = 50;
@@ -26,45 +28,54 @@ const plantas = [
 console.log(`${NOMBRE_APP}: ${plantas.length} plantas cargadas`);
 console.table(plantas);
 
+
 // =====================================================
-// 2. FUNCIONES DE LISTADO Y FILTRO (Consola)
+// 2. FUNCIONES DE LISTADO Y FILTRO (CONSOLA)
 // =====================================================
 
 function listarTodos(lista) {
     console.log("--- Todas las plantas ---");
+
     for (const planta of lista) {
         const etiqueta = planta.altura <= LIMITE_ALTURA ? "Pequeña" : "Grande";
+
         console.log(`${planta.id}: ${planta.nombre} - ${planta.altura} cm - ${etiqueta}`);
     }
 }
 
 function filtrar(lista, limite) {
     let encontrados = 0;
-    console.log(`--- Plantas de ${limite} cm o mas y saludables ---`);
-   
+
+    console.log(`--- Plantas de ${limite} cm o más y saludables ---`);
+
     for (const planta of lista) {
         if (planta.altura >= limite && planta.estado === "Saludable") {
             console.log(`${planta.nombre}: ${planta.altura} cm - ${planta.estado}`);
             encontrados++;
         }
     }
+
     return encontrados;
 }
 
 function listar(lista) {
     console.log("--- Lista de plantas ---");
+
     if (lista.length === 0) {
-        console.log("No hay plantas en la coleccion.");
+        console.log("No hay plantas en la colección.");
         return [];
     }
+
     for (const planta of lista) {
         console.log(`${planta.id}: ${planta.nombre} - ${planta.altura} cm - ${planta.ubicacion}`);
     }
+
     return lista;
 }
 
+
 // =====================================================
-// 3. BUSQUEDA, AÑADIR Y ELIMINAR
+// 3. BÚSQUEDA, AÑADIR Y ELIMINAR
 // =====================================================
 
 function buscarPorTexto(lista, texto) {
@@ -77,6 +88,7 @@ function buscarPorTexto(lista, texto) {
         .toLowerCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "");
+
     const buscado = normalizar(texto.trim());
     const resultado = [];
 
@@ -84,21 +96,33 @@ function buscarPorTexto(lista, texto) {
         const textoPlanta = normalizar(
             `${planta.nombre} ${planta.especie} ${planta.ubicacion} ${planta.estado}`
         );
-        if (textoPlanta.includes(buscado)) resultado.push(planta);
+
+        if (textoPlanta.includes(buscado)) {
+            resultado.push(planta);
+        }
     }
+
     if (resultado.length === 0) {
         console.log("No se encontraron plantas.");
     }
+
     return resultado;
 }
 
 function anadirPlanta(lista, nuevaPlanta) {
     if (!nuevaPlanta || typeof nuevaPlanta !== "object" || Array.isArray(nuevaPlanta)) {
-        console.error("La planta nueva no es valida.");
+        console.error("La planta nueva no es válida.");
         return null;
     }
 
-    const camposTexto = ["nombre", "especie", "fecha_adquisicion", "ubicacion", "estado"];
+    const camposTexto = [
+        "nombre",
+        "especie",
+        "fecha_adquisicion",
+        "ubicacion",
+        "estado"
+    ];
+
     const plantaValida = camposTexto.every(campo =>
         typeof nuevaPlanta[campo] === "string" && nuevaPlanta[campo].trim() !== ""
     ) && Number.isFinite(nuevaPlanta.altura) && nuevaPlanta.altura >= 0;
@@ -109,6 +133,7 @@ function anadirPlanta(lista, nuevaPlanta) {
     }
 
     let mayorId = 0;
+
     for (const planta of lista) {
         if (Number.isFinite(planta.id) && planta.id > mayorId) {
             mayorId = planta.id;
@@ -116,9 +141,11 @@ function anadirPlanta(lista, nuevaPlanta) {
     }
 
     const plantaConId = { ...nuevaPlanta, id: mayorId + 1 };
+
     lista.push(plantaConId);
+
     console.log(`Planta añadida: ${plantaConId.nombre} (ID: ${plantaConId.id})`);
-   
+
     return plantaConId.id;
 }
 
@@ -126,16 +153,21 @@ function eliminarPorId(lista, id) {
     for (let i = 0; i < lista.length; i++) {
         if (lista[i].id === id) {
             const eliminada = lista.splice(i, 1)[0];
+
             console.log(`Planta eliminada: ${eliminada.nombre}`);
+
             return true;
         }
     }
+
     console.log(`No existe ninguna planta con ID ${id}.`);
+
     return false;
 }
 
+
 // =====================================================
-// 4. ESTADISTICAS Y CATEGORIAS
+// 4. ESTADÍSTICAS Y CATEGORÍAS
 // =====================================================
 
 function contarPorCategoria(lista) {
@@ -150,22 +182,29 @@ function contarPorCategoria(lista) {
             case "Saludable":
             case "Necesita agua":
             case "Necesita cuidados":
-                recuento.set(planta.estado, recuento.get(planta.estado) + 1);
+                recuento.set(
+                    planta.estado,
+                    recuento.get(planta.estado) + 1
+                );
                 break;
+
             default:
                 console.warn(`Estado no reconocido: ${planta.estado}`);
         }
     }
-   
+
     console.log("--- Recuento por estado ---");
+
     for (const [estado, cantidad] of recuento) {
         console.log(`${estado}: ${cantidad}`);
     }
+
     return recuento;
 }
 
 function mostrarEstadisticas(lista) {
     const resultado = estadisticas(lista);
+
     if (resultado === null) {
         console.log("No hay plantas para calcular estadísticas.");
         return;
@@ -180,16 +219,18 @@ function estadisticas(lista) {
     if (lista.length === 0) {
         return null;
     }
-   
+
     let suma = 0;
     let maximo = lista[0];
     let minimo = lista[0];
 
     for (const planta of lista) {
         suma += planta.altura;
+
         if (planta.altura > maximo.altura) {
             maximo = planta;
         }
+
         if (planta.altura < minimo.altura) {
             minimo = planta;
         }
@@ -215,16 +256,19 @@ function pintarEstadisticas(lista) {
     elemento.textContent = `Altura total: ${resultado.total} cm | Altura media: ${resultado.media.toFixed(1)} cm | Más alta: ${resultado.maximo.nombre} (${resultado.maximo.altura} cm) | Más baja: ${resultado.minimo.nombre} (${resultado.minimo.altura} cm)`;
 }
 
+
 // =====================================================
-// 5. PINTAR EN LA PAGINA (DOM)
+// 5. PINTAR EN LA PÁGINA (DOM)
 // =====================================================
 
 function crearTarjeta(elemento) {
     const tarjeta = document.createElement("article");
+
     tarjeta.classList.add("tarjeta");
-   
-    // Asigna una clase específica según el estado para el borde de color
+
+    // Asigna una clase según el estado de la planta.
     const claseEstado = "tarjeta-" + elemento.estado.toLowerCase().replace(/\s+/g, "-");
+
     tarjeta.classList.add(claseEstado);
 
     const titulo = document.createElement("h3");
@@ -234,13 +278,14 @@ function crearTarjeta(elemento) {
     datos.textContent = `${elemento.especie} · ${elemento.altura} cm · ${elemento.ubicacion}`;
 
     tarjeta.append(titulo, datos);
+
     return tarjeta;
 }
 
 function pintar(lista) {
     const listado = document.querySelector("#listado");
-   
-    // Vacía el contenedor antes de pintar para evitar duplicados
+
+    // Vacía el listado antes de crear las nuevas tarjetas.
     listado.replaceChildren();
 
     for (const elemento of lista) {
@@ -248,87 +293,142 @@ function pintar(lista) {
     }
 
     const resumen = document.querySelector("#resumen");
+
     resumen.textContent = `${lista.length} plantas`;
 }
 
-// =====================================================
-// 6. INICIALIZACION
-// =====================================================
-
-pintar(plantas);
-pintarEstadisticas(plantas);
-
 
 // =====================================================
-// 7. ORDENAR
+// 6. ORDENAR
 // =====================================================
 
-function ordenar(lista,criterio){
+function ordenar(lista, criterio) {
+    // Creamos una copia para no modificar el array original.
     const resultado = [...lista];
 
-    if(criterio === "nombre"){
-        resultado.sort((a, b)=>
+    if (criterio === "nombre") {
+        // Orden alfabético.
+        resultado.sort((a, b) =>
             a.nombre.localeCompare(b.nombre)
         );
-    } else if (criterio === "altura"){
+
+    } else if (criterio === "altura") {
+        // Orden numérico de menor a mayor.
         resultado.sort((a, b) => a.altura - b.altura);
     }
 
     return resultado;
 }
 
+
 // =====================================================
-// 8. ACTUALIZAR
+// 7. MOSTRAR X DE Y
 // =====================================================
 
+function pintarResumen(mostrados) {
+    const resumen = document.querySelector("#resumen");
+
+    if (mostrados > 0) {
+        resumen.textContent = `Mostrando ${mostrados} de ${plantas.length} plantas`;
+
+    } else {
+        resumen.textContent = `No hay plantas que contengan "${textoBuscado}"`;
+    }
+}
+
+
+// =====================================================
+// 8. COOKIES: GUARDAR Y LEER
+// =====================================================
+
+function guardarCookie(nombre, valor, dias) {
+    const segundos = dias * 24 * 60 * 60;
+
+    const texto = encodeURIComponent(valor);
+
+    document.cookie = `${nombre}=${texto}; max-age=${segundos}; path=/`;
+}
+
+function leerCookie(nombre) {
+    const partes = document.cookie.split("; ");
+
+    for (const parte of partes) {
+        const [clave, valor] = parte.split("=");
+
+        if (clave === nombre) {
+            return decodeURIComponent(valor);
+        }
+    }
+
+    return null;
+}
+
+
+// =====================================================
+// 9. ACTUALIZAR LA APLICACIÓN
+// =====================================================
 
 function actualizar() {
     let resultado = plantas;
 
+    // Primero aplicamos el buscador.
     if (textoBuscado.trim() !== "") {
         resultado = buscarPorTexto(plantas, textoBuscado);
     }
 
+    // Después aplicamos el orden seleccionado.
     resultado = ordenar(resultado, criterio);
 
+    // Finalmente actualizamos la página.
     pintar(resultado);
     pintarEstadisticas(resultado);
     pintarResumen(resultado.length);
 }
 
+
 // =====================================================
-// 9. EVENTOS
+// 10. ELEGIR Y GUARDAR EL ORDEN
 // =====================================================
 
+function elegirOrden(nuevo) {
+    criterio = nuevo;
+
+    // Guardamos el último orden durante 30 días.
+    guardarCookie("orden", criterio, 30);
+
+    actualizar();
+}
+
+
+// =====================================================
+// 11. EVENTOS
+// =====================================================
+
+// Buscador: se ejecuta cuando escribimos.
 document.querySelector("#buscador").addEventListener("input", function () {
     textoBuscado = this.value;
+
     actualizar();
 });
 
-document.querySelector("#ordenNombre").addEventListener("click", function () {
-    criterio = "nombre";
-    actualizar();
-});
+// Botón para ordenar por nombre.
+document.querySelector("#ordenNombre")
+    .addEventListener("click", () => elegirOrden("nombre"));
 
-document.querySelector("#ordenNumero").addEventListener("click", function () {
-    criterio = "altura";
-    actualizar();
-});
-
-pintar(plantas);
-pintarEstadisticas(plantas);
+// Botón para ordenar por altura.
+document.querySelector("#ordenNumero")
+    .addEventListener("click", () => elegirOrden("altura"));
 
 
 // =====================================================
-// 9. MOSTRAR X DE Y
+// 12. INICIALIZACIÓN
 // =====================================================
 
-function pintarResumen(mostrados){
-    const resumen = document.querySelector("#resumen");
+// Recuperamos el último orden guardado en la cookie.
+const ordenGuardado = leerCookie("orden");
 
-    if(mostrados > 0){
-        resumen.textContent = `Mostrando ${mostrados} de ${plantas.length} plantas`;
-    } else {
-        resumen.textContent = `No hay plantas que contengan "${textoBuscado}"`;
-    }
-}
+// Si no hay cookie, comenzamos sin ordenar.
+criterio = ordenGuardado ?? "ninguno";
+
+// Mostramos las plantas aplicando el orden recuperado.
+actualizar();
