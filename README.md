@@ -56,20 +56,11 @@ La cookie únicamente guarda el criterio de ordenación. No almacena los cambios
 
 ## Búsqueda, orden y colores en la página
 
-El campo «Buscar planta...» filtra las tarjetas mientras escribes. Busca en el
-nombre, la especie, la ubicación y el estado; no distingue entre mayúsculas,
-minúsculas ni tildes. Si no hay coincidencias, no se muestran tarjetas. Al
-borrar el texto, se muestran de nuevo todas las plantas.
+El campo «Buscar planta...» filtra las tarjetas mientras escribes. Busca en el nombre, la especie, la ubicación y el estado; no distingue entre mayúsculas, minúsculas ni tildes. Si no hay coincidencias, no se muestran tarjetas. Al borrar el texto, se muestran de nuevo todas las plantas.
 
-Los botones permiten ordenar las tarjetas por nombre (A-Z) o por altura de menor
-a mayor. La búsqueda y el orden se pueden combinar: el orden se aplica a los
-resultados de la búsqueda. Las funciones `buscarPorTexto(lista, texto)` y
-`ordenar(lista, criterio)` realizan estas operaciones por separado; `actualizar()`
-las combina para refrescar las tarjetas y las estadísticas. El ordenamiento
-trabaja sobre una copia, por lo que no cambia el array original `plantas`.
+Los botones permiten ordenar las tarjetas por nombre (A-Z) o por altura de menor a mayor. La búsqueda y el orden se pueden combinar: el orden se aplica a los resultados de la búsqueda. Las funciones `buscarPorTexto(lista, texto)` y `ordenar(lista, criterio)` realizan estas operaciones por separado; `act ualizar()`las combina para refrescar las tarjetas y las estadísticas. El ordenamiento trabaja sobre una copia, por lo que no cambia el array original `plantas`.
 
-La leyenda de colores identifica el estado de cada planta mediante el borde de
-su tarjeta:
+La leyenda de colores identifica el estado de cada planta mediante el borde de su tarjeta:
 
 | Color | Estado |
 |---|---|
@@ -77,12 +68,24 @@ su tarjeta:
 | Naranja | Necesita agua |
 | Rojo | Necesita cuidados |
 
+### Gestión de fechas de adquisición
+
+Se ha incorporado la gestión de fechas de adquisición de las plantas con las siguientes funcionalidades:
+
+- Conversión de fechas al formato legible español (día, mes y año).
+- Cálculo de los días transcurridos desde la adquisición.
+- Identificación visual de las plantas adquiridas durante los últimos 30 días mediante un borde verde.
+- Incorporación de la fecha de adquisición en cada tarjeta.
+- Nuevo criterio de ordenación para mostrar primero las plantas más recientes.
+- Persistencia del criterio de ordenación mediante cookies, incluso después de recargar la página.
+
+Para implementar estas funcionalidades se han utilizado objetos `Date`, el método `toLocaleDateString()`, operaciones con fechas y clases CSS dinámicas.
+
 ## Funciones de orden de la página
 
 ### `ordenar(lista, criterio)`
 
-Devuelve una copia ordenada de la lista. Acepta los criterios `"nombre"` (A-Z) y
-`"altura"` (de menor a mayor). No modifica la lista recibida.
+Devuelve una copia ordenada de la lista. Acepta los criterios `"nombre"` (A-Z) y `"altura"` (de menor a mayor). No modifica la lista recibida.
 
 Ejemplos:
 
@@ -400,3 +403,39 @@ guardarCookie("orden", "altura", 30);
 ### Uso de inteligencia artificial
 
 Se ha utilizado ChatGPT como apoyo para revisar y organizar el código, resolver errores y mejorar la documentación del proyecto.
+
+## Reparto del trabajo
+
+El proyecto Mis Plantas se ha desarrollado de forma conjunta por Kevin Núñez Sánchez y Javier Becerro Batuecas.
+
+### Kevin Núñez Sánchez
+
+Tareas realizadas:
+
+- Creación de la colección inicial de plantas mediante un array de objetos.
+- Implementación del listado de plantas y clasificación según su altura.
+- Desarrollo de funciones de filtrado por altura y estado.
+- Implementación del buscador por nombre, especie, ubicación y estado.
+- Desarrollo de las funciones para añadir y eliminar plantas.
+- Implementación de estadísticas: altura total, media, planta más alta y más baja.
+- Creación de tarjetas dinámicas para mostrar las plantas en la página web.
+- Aplicación de estilos visuales según el estado de cada planta.
+- Implementación de la ordenación alfabética y por altura.
+- Gestión de cookies para guardar y recuperar el último criterio de ordenación.
+- Incorporación de fechas de adquisición en las tarjetas.
+- Identificación visual de las plantas adquiridas recientemente.
+- Implementación de la ordenación por fecha de adquisición.
+
+### Javier Becerro Batuecas
+
+Tareas restantes del desarrollo y documentación:
+
+- Desarrollo de las funcionalidades complementarias del proyecto.
+- Colaboración en la estructura y organización de la aplicación.
+- Revisión y comprobación del funcionamiento general.
+- Integración de los diferentes apartados del proyecto.
+- Elaboración y actualización de la documentación.
+
+### Trabajo en equipo
+
+Ambos integrantes han colaborado en las pruebas, la resolución de errores y la evolución del proyecto.
