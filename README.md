@@ -6,6 +6,24 @@ Mis Plantas es una aplicación sencilla de JavaScript para consultar y gestionar
 
 La aplicación permite listar plantas, filtrarlas por altura y estado, contar sus categorías, buscar por texto, añadir y eliminar plantas y consultar estadísticas sobre sus alturas.
 
+## Sprint 1
+
+Durante el Sprint 1 se ha ampliado la aplicación Mis Plantas, pasando de trabajar principalmente desde la consola a disponer de una interfaz web interactiva.
+
+Las funcionalidades incorporadas son:
+
+- Visualización de las plantas mediante tarjetas dinámicas.
+- Estadísticas de altura en la página.
+- Buscador en tiempo real.
+- Ordenación por nombre, altura y fecha de adquisición.
+- Persistencia del último criterio de ordenación mediante cookies.
+- Visualización de fechas en formato legible.
+- Identificación de las plantas adquiridas durante los últimos 30 días.
+- Formulario para añadir nuevas plantas.
+- Validación del nombre mediante expresiones regulares (Regex), impidiendo añadir nombres que no cumplen el patrón.
+
+Se han utilizado HTML, CSS y JavaScript, aplicando manipulación del DOM, eventos, arrays, funciones, objetos Date, cookies y expresiones regulares.
+
 ## Estructura del proyecto
 
 ```text
@@ -58,7 +76,7 @@ La cookie únicamente guarda el criterio de ordenación. No almacena los cambios
 
 El campo «Buscar planta...» filtra las tarjetas mientras escribes. Busca en el nombre, la especie, la ubicación y el estado; no distingue entre mayúsculas, minúsculas ni tildes. Si no hay coincidencias, no se muestran tarjetas. Al borrar el texto, se muestran de nuevo todas las plantas.
 
-Los botones permiten ordenar las tarjetas por nombre (A-Z) o por altura de menor a mayor. La búsqueda y el orden se pueden combinar: el orden se aplica a los resultados de la búsqueda. Las funciones `buscarPorTexto(lista, texto)` y `ordenar(lista, criterio)` realizan estas operaciones por separado; `act ualizar()`las combina para refrescar las tarjetas y las estadísticas. El ordenamiento trabaja sobre una copia, por lo que no cambia el array original `plantas`.
+Los botones permiten ordenar las tarjetas por nombre (A-Z), por altura de menor a mayor y por fecha de adquisición, mostrando primero las plantas más recientes. La búsqueda y el orden se pueden combinar: el orden se aplica a los resultados de la búsqueda. Las funciones `buscarPorTexto(lista, texto)` y `ordenar(lista, criterio)` realizan estas operaciones por separado; `actualizar()` las combina para refrescar las tarjetas y las estadísticas. El ordenamiento trabaja sobre una copia, por lo que no modifica el array original `plantas`.
 
 La leyenda de colores identifica el estado de cada planta mediante el borde de su tarjeta:
 
@@ -96,13 +114,20 @@ espacios, guiones y apóstrofes.
 
 ### `ordenar(lista, criterio)`
 
-Devuelve una copia ordenada de la lista. Acepta los criterios `"nombre"` (A-Z) y `"altura"` (de menor a mayor). No modifica la lista recibida.
+Devuelve una copia ordenada de la lista sin modificar el array original.
+
+Admite tres criterios:
+
+- `"nombre"`: orden alfabético de A a Z.
+- `"altura"`: orden numérico de menor a mayor.
+- `"fecha"`: orden cronológico, de la fecha de adquisición más reciente a la más antigua.
 
 Ejemplos:
 
 ```javascript
 ordenar(plantas, "nombre");
 ordenar(plantas, "altura");
+ordenar(plantas, "fecha");
 ```
 
 ### `actualizar()`
