@@ -93,7 +93,7 @@ body {
 
 /* Plantas adquiridas recientemente */
 .reciente {
-    border-left: 6px solid #0ddacc;
+    border-top: 6px solid green;
 }
 
 /* Estilo de la fecha */

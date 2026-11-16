@@ -33,10 +33,12 @@ Proyecto/
 ├── css/
 │   └── estilos.css
 └── js/
-    └── app.js
+    ├── datos.js
+    ├── logica.js
+    └── interfaz.js
 ```
 
-El archivo `index.html` carga `js/app.js` mediante la etiqueta `<script src="js/app.js" defer></script>` y los estilos desde `css/estilos.css`.
+El archivo `index.html` carga `js/interfaz.js` mediante la etiqueta `<script type="module" src="js/interfaz.js"></script>` y los estilos desde `css/estilos.css`.
 
 ## Cómo ejecutar la aplicación
 
@@ -92,7 +94,7 @@ Se ha incorporado la gestión de fechas de adquisición de las plantas con las s
 
 - Conversión de fechas al formato legible español (día, mes y año).
 - Cálculo de los días transcurridos desde la adquisición.
-- Identificación visual de las plantas adquiridas durante los últimos 30 días mediante un borde verde.
+- Identificación visual de las plantas adquiridas durante los últimos 30 días mediante un borde verde adicional.
 - Incorporación de la fecha de adquisición en cada tarjeta.
 - Nuevo criterio de ordenación para mostrar primero las plantas más recientes.
 - Persistencia del criterio de ordenación mediante cookies, incluso después de recargar la página.
@@ -170,7 +172,7 @@ Gestiona el criterio de ordenación seleccionado por el usuario.
 2. Guarda el criterio seleccionado mediante `guardarCookie()`.
 3. Llama a `actualizar()` para mostrar las plantas ordenadas.
 
-Los criterios utilizados son `nombre` y `altura`.
+Los criterios utilizados son `nombre`, `altura` y `fecha`.
 
 ### Persistencia del orden
 
@@ -182,7 +184,14 @@ La cookie tiene una duración de 30 días. De esta forma, al recargar la página
 
 ## Funciones
 
-Todas las funciones pueden probarse desde la consola del navegador. Para utilizarlas, escribe la llamada correspondiente y pulsa Intro.
+Las funciones de lógica pueden probarse desde la consola del navegador. Primero ejecuta estas dos instrucciones una sola vez por recarga; después funcionan los ejemplos de lógica de este README:
+
+```javascript
+const { plantas } = await import("./js/datos.js");
+const { listarTodos, filtrar, listar, quitarTildes, buscarPorTexto, anadirPlanta, eliminarPorId, contarPorCategoria, mostrarEstadisticas, estadisticas, ordenar, crearFecha, fechaLegible, diasDesde } = await import("./js/logica.js");
+```
+
+Las funciones de interfaz (pintar, actualizar, cookies y elegirOrden) son internas al módulo: se ejecutan mediante los eventos de la página. Para probarlas individualmente, pon un punto de interrupción dentro de `interfaz.js` y usa la consola mientras la ejecución esté pausada en ese módulo. Añadir o eliminar desde la consola cambia los datos; para repintarlos sin recargar, escribe o borra texto en el buscador.
 
 ### 1. `listarTodos(lista)`
 
@@ -414,7 +423,11 @@ eliminarPorId(plantas, 3);
 // Comprobar la colección
 listar(plantas);
 
+```
+
 Los cambios se mantienen mientras la página esté abierta. Al recargarla, se recuperan los diez datos iniciales.
+
+```javascript
 
 // Comprobar el resumen de resultados
 pintarResumen(plantas.length);
@@ -472,7 +485,26 @@ Colaboración en las restantes tareas de desarrollo del proyecto:
 - Revisión y comprobación del funcionamiento general.
 - Integración de los diferentes apartados del proyecto.
 - Elaboración y actualización de la documentación.
+- Revisión de las correcciones del profesor y de los temas aportados.
+- Sustitución de las construcciones señaladas por bucles y comprobaciones básicas.
+- Organización del código por responsabilidades.
+- Corrección de incoherencias y del formato de los ejemplos del README, manteniendo la información y el reparto anterior.
+- Separación del proyecto en `datos.js`, `logica.js` e `interfaz.js`, con `export` e `import`.
+- Comprobaciones automatizadas de lógica, importaciones y eventos con un DOM simulado. Queda por comprobar visualmente en Live Server.
+
 
 ### Trabajo en equipo
 
 Ambos integrantes han colaborado en las pruebas, la resolución de errores y la evolución del proyecto.
+
+## Sprint 2 · Sesión 14
+
+La aplicación se ha separado en tres módulos y mantiene las mismas funcionalidades:
+
+- `js/datos.js`: exporta únicamente el array `plantas`, con sus diez registros originales.
+- `js/logica.js`: contiene las funciones de búsqueda, altas, bajas, listados, categorías, estadísticas, ordenación y fechas. No accede al DOM.
+- `js/interfaz.js`: importa los datos y la lógica; contiene el pintado de tarjetas, las cookies, los eventos, el formulario y el inicio.
+
+El HTML carga un único script con `type="module"`. Es necesario abrir el proyecto con Live Server; los módulos no se ejecutan abriendo el HTML con doble clic.
+
+El reto 1 está en `../retos-s14`, fuera del repositorio del proyecto. Incluye `maximo`, `unir`, `conTiempo` y `contarSi`, con pruebas y comentarios sobre sus resultados esperados. No se han añadido los ejercicios opcionales.

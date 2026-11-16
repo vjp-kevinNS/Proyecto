@@ -1,9 +1,7 @@
-
-// =====================================================
 // PROYECTO: MIS PLANTAS
-// =====================================================
 
-// 1. CONSTANTES Y DATOS
+// =====================================================
+// 1. DATOS
 // =====================================================
 
 const NOMBRE_APP = "Mis Plantas";
@@ -26,12 +24,10 @@ const plantas = [
     { id: 10, nombre: "Tomatera", especie: "Solanum lycopersicum", fecha_adquisicion: "2026-01-20", altura: 70, ubicacion: "Huerto", estado: "Saludable" }
 ];
 
-console.log(`${NOMBRE_APP}: ${plantas.length} plantas cargadas`);
-console.table(plantas);
-
+const PATRON_NOMBRE = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+([ '-][A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+)*$/;
 
 // =====================================================
-// 2. FUNCIONES DE LISTADO Y FILTRO (CONSOLA)
+// 2. FUNCIONES
 // =====================================================
 
 function listarTodos(lista) {
@@ -74,10 +70,22 @@ function listar(lista) {
     return lista;
 }
 
+function quitarTildes(texto) {
+    const originales = "áéíóúüñàèìòùäëïöâêîôûãõç";
+    const equivalentes = "aeiouunaeiouaeioaeiouaoc";
+    const minusculas = texto.toLowerCase();
+    let resultado = "";
 
-// =====================================================
-// 3. BÚSQUEDA, AÑADIR Y ELIMINAR
-// =====================================================
+    for (const letra of minusculas) {
+        const posicion = originales.indexOf(letra);
+        if (posicion === -1) {
+            resultado += letra;
+        } else {
+            resultado += equivalentes[posicion];
+        }
+    }
+    return resultado;
+}
 
 function buscarPorTexto(lista, texto) {
     if (typeof texto !== "string" || texto.trim() === "") {
@@ -85,16 +93,11 @@ function buscarPorTexto(lista, texto) {
         return [];
     }
 
-    const normalizar = valor => valor
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
-
-    const buscado = normalizar(texto.trim());
+    const buscado = quitarTildes(texto.trim());
     const resultado = [];
 
     for (const planta of lista) {
-        const textoPlanta = normalizar(
+        const textoPlanta = quitarTildes(
             `${planta.nombre} ${planta.especie} ${planta.ubicacion} ${planta.estado}`
         );
 
@@ -111,7 +114,7 @@ function buscarPorTexto(lista, texto) {
 }
 
 function anadirPlanta(lista, nuevaPlanta) {
-    if (!nuevaPlanta || typeof nuevaPlanta !== "object" || Array.isArray(nuevaPlanta)) {
+    if (!nuevaPlanta || typeof nuevaPlanta !== "object") {
         console.error("La planta nueva no es válida.");
         return null;
     }
@@ -130,9 +133,16 @@ function anadirPlanta(lista, nuevaPlanta) {
         "estado"
     ];
 
-    const plantaValida = camposTexto.every(campo =>
-        typeof nuevaPlanta[campo] === "string" && nuevaPlanta[campo].trim() !== ""
-    ) && Number.isFinite(nuevaPlanta.altura) && nuevaPlanta.altura >= 0;
+    let plantaValida = true;
+    for (const campo of camposTexto) {
+        if (typeof nuevaPlanta[campo] !== "string" || nuevaPlanta[campo].trim() === "") {
+            plantaValida = false;
+        }
+    }
+    if (typeof nuevaPlanta.altura !== "number" || Number.isNaN(nuevaPlanta.altura) ||
+        nuevaPlanta.altura < 0 || nuevaPlanta.altura === Infinity) {
+        plantaValida = false;
+    }
 
     if (!plantaValida) {
         console.error("La planta nueva debe incluir sus datos y una altura válida.");
@@ -142,12 +152,20 @@ function anadirPlanta(lista, nuevaPlanta) {
     let mayorId = 0;
 
     for (const planta of lista) {
-        if (Number.isFinite(planta.id) && planta.id > mayorId) {
+        if (typeof planta.id === "number" && !Number.isNaN(planta.id) && planta.id !== Infinity && planta.id > mayorId) {
             mayorId = planta.id;
         }
     }
 
-    const plantaConId = { ...nuevaPlanta, id: mayorId + 1 };
+    const plantaConId = {
+        id: mayorId + 1,
+        nombre: nuevaPlanta.nombre,
+        especie: nuevaPlanta.especie,
+        fecha_adquisicion: nuevaPlanta.fecha_adquisicion,
+        altura: nuevaPlanta.altura,
+        ubicacion: nuevaPlanta.ubicacion,
+        estado: nuevaPlanta.estado
+    };
 
     lista.push(plantaConId);
 
@@ -171,11 +189,6 @@ function eliminarPorId(lista, id) {
 
     return false;
 }
-
-
-// =====================================================
-// 4. ESTADÍSTICAS Y CATEGORÍAS
-// =====================================================
 
 function contarPorCategoria(lista) {
     const recuento = new Map([
@@ -251,21 +264,74 @@ function estadisticas(lista) {
     };
 }
 
-function pintarEstadisticas(lista) {
-    const resultado = estadisticas(lista);
-    const elemento = document.querySelector("#estadisticas");
+function ordenar(lista, criterio) {
+    // Creamos una copia para no modificar el array original.
+    const resultado = [...lista];
 
-    if (resultado === null) {
-        elemento.textContent = "No hay plantas para calcular estadísticas.";
-        return;
+    if (criterio === "nombre") {
+        // Orden alfabético.
+        resultado.sort((a, b) =>
+            a.nombre.localeCompare(b.nombre)
+        );
+
+    } else if (criterio === "altura") {
+        // Orden numérico de menor a mayor.
+        resultado.sort((a, b) => a.altura - b.altura);
+
+    } else if (criterio === "fecha") {
+        // Orden por fecha, de más reciente a más antigua.
+        resultado.sort((a, b) =>
+            crearFecha(b.fecha_adquisicion) - crearFecha(a.fecha_adquisicion)
+        );
     }
 
-    elemento.textContent = `Altura total: ${resultado.total} cm | Altura media: ${resultado.media.toFixed(1)} cm | Más alta: ${resultado.maximo.nombre} (${resultado.maximo.altura} cm) | Más baja: ${resultado.minimo.nombre} (${resultado.minimo.altura} cm)`;
+    return resultado;
 }
 
+function guardarCookie(nombre, valor, dias) {
+    const segundos = dias * 24 * 60 * 60;
+
+    const texto = encodeURIComponent(valor);
+
+    document.cookie = `${nombre}=${texto}; max-age=${segundos}; path=/`;
+}
+
+function leerCookie(nombre) {
+    const partes = document.cookie.split("; ");
+
+    for (const parte of partes) {
+        const [clave, valor] = parte.split("=");
+
+        if (clave === nombre) {
+            return decodeURIComponent(valor);
+        }
+    }
+
+    return null;
+}
+
+function crearFecha(texto) {
+    return new Date(texto + "T00:00:00");
+}
+
+function fechaLegible(texto) {
+    return crearFecha(texto).toLocaleDateString("es-ES", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
+}
+
+function diasDesde(texto) {
+    const MS_DIA = 24 * 60 * 60 * 1000;
+
+    const diferencia = Date.now() - crearFecha(texto).getTime();
+
+    return Math.floor(diferencia / MS_DIA);
+}
 
 // =====================================================
-// 5. PINTAR EN LA PÁGINA (DOM)
+// 3. PINTAR
 // =====================================================
 
 function crearTarjeta(elemento) {
@@ -292,7 +358,8 @@ function crearTarjeta(elemento) {
     fecha.textContent = fechaLegible(elemento.fecha_adquisicion);
 
     // Comprobamos si la planta es reciente.
-    if (diasDesde(elemento.fecha_adquisicion) <= DIAS_RECIENTE) {
+    const dias = diasDesde(elemento.fecha_adquisicion);
+    if (dias >= 0 && dias <= DIAS_RECIENTE) {
         tarjeta.classList.add("reciente");
     }
 
@@ -317,39 +384,17 @@ function pintar(lista) {
     resumen.textContent = `${lista.length} plantas`;
 }
 
+function pintarEstadisticas(lista) {
+    const resultado = estadisticas(lista);
+    const elemento = document.querySelector("#estadisticas");
 
-// =====================================================
-// 6. ORDENAR
-// =====================================================
-
-function ordenar(lista, criterio) {
-    // Creamos una copia para no modificar el array original.
-    const resultado = [...lista];
-
-    if (criterio === "nombre") {
-        // Orden alfabético.
-        resultado.sort((a, b) =>
-            a.nombre.localeCompare(b.nombre)
-        );
-
-    } else if (criterio === "altura") {
-        // Orden numérico de menor a mayor.
-        resultado.sort((a, b) => a.altura - b.altura);
-
-    } else if (criterio === "fecha") {
-        // Orden por fecha, de más reciente a más antigua.
-        resultado.sort((a, b) =>
-            crearFecha(b.fecha_adquisicion) - crearFecha(a.fecha_adquisicion)
-        );
+    if (resultado === null) {
+        elemento.textContent = "No hay plantas para calcular estadísticas.";
+        return;
     }
 
-    return resultado;
+    elemento.textContent = `Altura total: ${resultado.total} cm | Altura media: ${resultado.media.toFixed(1)} cm | Más alta: ${resultado.maximo.nombre} (${resultado.maximo.altura} cm) | Más baja: ${resultado.minimo.nombre} (${resultado.minimo.altura} cm)`;
 }
-
-
-// =====================================================
-// 7. MOSTRAR X DE Y
-// =====================================================
 
 function pintarResumen(mostrados) {
     const resumen = document.querySelector("#resumen");
@@ -361,38 +406,6 @@ function pintarResumen(mostrados) {
         resumen.textContent = `No hay plantas que contengan "${textoBuscado}"`;
     }
 }
-
-
-// =====================================================
-// 8. COOKIES: GUARDAR Y LEER
-// =====================================================
-
-function guardarCookie(nombre, valor, dias) {
-    const segundos = dias * 24 * 60 * 60;
-
-    const texto = encodeURIComponent(valor);
-
-    document.cookie = `${nombre}=${texto}; max-age=${segundos}; path=/`;
-}
-
-function leerCookie(nombre) {
-    const partes = document.cookie.split("; ");
-
-    for (const parte of partes) {
-        const [clave, valor] = parte.split("=");
-
-        if (clave === nombre) {
-            return decodeURIComponent(valor);
-        }
-    }
-
-    return null;
-}
-
-
-// =====================================================
-// 9. ACTUALIZAR LA APLICACIÓN
-// =====================================================
 
 function actualizar() {
     let resultado = plantas;
@@ -411,11 +424,6 @@ function actualizar() {
     pintarResumen(resultado.length);
 }
 
-
-// =====================================================
-// 10. ELEGIR Y GUARDAR EL ORDEN
-// =====================================================
-
 function elegirOrden(nuevo) {
     criterio = nuevo;
 
@@ -425,9 +433,8 @@ function elegirOrden(nuevo) {
     actualizar();
 }
 
-
 // =====================================================
-// 11. EVENTOS
+// 4. EVENTOS
 // =====================================================
 
 // Buscador: se ejecuta cuando escribimos.
@@ -445,52 +452,9 @@ document.querySelector("#ordenNombre")
 document.querySelector("#ordenNumero")
     .addEventListener("click", () => elegirOrden("altura"));
 
-
-// =====================================================
-// 12. FUNCIONES PARA TRABAJAR CON FECHAS
-// =====================================================
-
-function crearFecha(texto) {
-    return new Date(texto + "T00:00:00");
-}
-
-function fechaLegible(texto) {
-    return crearFecha(texto).toLocaleDateString("es-ES", {
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-    });
-}
-
-function diasDesde(texto) {
-    const MS_DIA = 24 * 60 * 60 * 1000;
-
-    const ahora = new Date();
-
-    ahora.setHours(0, 0, 0, 0);
-
-    const diferencia = ahora.getTime() - crearFecha(texto).getTime();
-
-    return Math.floor(diferencia / MS_DIA);
-}
-// =====================================================
-// 13. EVENTO PARA ORDENAR POR FECHA
-// =====================================================
-
 // Botón para ordenar por fecha de adquisición.
 document.querySelector("#ordenFecha")
     .addEventListener("click", () => elegirOrden("fecha"));
-
-// =====================================================
-// 14. VALIDACIÓN DEL NOMBRE CON REGEX
-// =====================================================
-
-// Permite letras, espacios, guiones y apóstrofes.
-const PATRON_NOMBRE = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+(?:[ '-][A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+)*$/;
-
-// =====================================================
-// 15. FORMULARIO PARA AÑADIR PLANTAS
-// =====================================================
 
 document.querySelector("#formulario")
     .addEventListener("submit", function (evento) {
@@ -528,14 +492,14 @@ document.querySelector("#formulario")
     });
 
 // =====================================================
-// INICIALIZACIÓN
+// 5. INICIO
 // =====================================================
 
-// Recuperamos el último orden guardado en la cookie.
+console.log(`${NOMBRE_APP}: ${plantas.length} plantas cargadas`);
+console.table(plantas);
+
+// Recuperamos el último orden guardado durante 30 días.
 const ordenGuardado = leerCookie("orden");
-
-// Si no hay cookie, comenzamos sin ordenar.
 criterio = ordenGuardado ?? "ninguno";
-
-// Mostramos las plantas aplicando el orden recuperado.
 actualizar();
+
