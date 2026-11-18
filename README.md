@@ -34,7 +34,9 @@ Proyecto/
 │   └── estilos.css
 └── js/
     ├── datos.js
+    ├── fechas.js
     ├── logica.js
+    ├── planta.js
     └── interfaz.js
 ```
 
@@ -188,7 +190,7 @@ Las funciones de lógica pueden probarse desde la consola del navegador. Primero
 
 ```javascript
 const { plantas } = await import("./js/interfaz.js");
-const { listarTodos, filtrar, listar, quitarTildes, buscarPorTexto, anadirPlanta, eliminarPorId, contarPorCategoria, mostrarEstadisticas, estadisticas, ordenar, crearFecha, fechaLegible, diasDesde } = await import("./js/logica.js");
+const { listarTodos, filtrar, listar, quitarTildes, buscarPorTexto, anadirPlanta, eliminarPorId, contarPorCategoria, mostrarEstadisticas, estadisticas, ordenar } = await import("./js/logica.js");
 ```
 
 Las funciones de interfaz (pintar, actualizar, cookies y elegirOrden) son internas al módulo: se ejecutan mediante los eventos de la página. Para probarlas individualmente, pon un punto de interrupción dentro de `interfaz.js` y usa la consola mientras la ejecución esté pausada en ese módulo. Añadir o eliminar desde la consola cambia los datos; para repintarlos sin recargar, escribe o borra texto en el buscador.
@@ -489,9 +491,12 @@ Colaboración en las restantes tareas de desarrollo del proyecto:
 - Sustitución de las construcciones señaladas por bucles y comprobaciones básicas.
 - Organización del código por responsabilidades.
 - Corrección de incoherencias y del formato de los ejemplos del README, manteniendo la información y el reparto anterior.
-- Separación del proyecto en `datos.js`, `logica.js` e `interfaz.js`, con `export` e `import`.
-- Comprobaciones automatizadas de lógica, importaciones y eventos con un DOM simulado. Queda por comprobar visualmente en Live Server.
-
+- Separación del proyecto en `datos.js`, `logica.js` e `interfaz.js`, con `export` e `import`, y carga de la interfaz desde el HTML mediante `type="module"`.
+- Implementación y prueba de las funciones `maximo`, `unir`, `conTiempo` y `contarSi` en la carpeta `../retos-s14`.
+- Creación de la clase `Planta` con validación del nombre y de los campos de texto obligatorios, y un setter que comprueba que la altura sea un número finito mayor o igual que cero.
+- Conversión de los diez registros iniciales y de las nuevas plantas del formulario en instancias de `Planta`.
+- Integración de `descripcion()` en las tarjetas para mostrar la especie, la altura y la ubicación, y de `esReciente(30)` para resaltar las plantas adquiridas en los últimos 30 días.
+- Comprobaciones automatizadas de la lógica, las importaciones y los eventos con un DOM simulado, incluidas las altas válidas y el rechazo de alturas inválidas.
 
 ### Trabajo en equipo
 
@@ -501,7 +506,7 @@ Ambos integrantes han colaborado en las pruebas, la resolución de errores y la 
 
 La aplicación se ha separado en tres módulos y mantiene las mismas funcionalidades:
 
-- `js/datos.js`: exporta únicamente el array `plantas`, con sus diez registros originales.
+- `js/datos.js`: exporta únicamente el array `datosPlantas`, con sus diez registros originales.
 - `js/logica.js`: contiene las funciones de búsqueda, altas, bajas, listados, categorías, estadísticas, ordenación y fechas. No accede al DOM.
 - `js/interfaz.js`: importa los datos y la lógica; contiene el pintado de tarjetas, las cookies, los eventos, el formulario y el inicio.
 
@@ -519,5 +524,5 @@ Para comprobar el error de validación en la consola del navegador:
 
 ```javascript
 const { Planta } = await import("./js/planta.js");
-new Planta({ nombre: "X", altura: -3 }); // RangeError
+new Planta({ nombre: "X", altura: -3 }); // Error: la altura no es válida
 ```

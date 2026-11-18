@@ -3,10 +3,9 @@
 import { crearFecha } from "./fechas.js";
 import { Planta } from "./planta.js";
 
-export { crearFecha, fechaLegible, diasDesde } from "./fechas.js";
-
 const LIMITE_ALTURA = 50;
 
+// Escribe en consola todas las plantas y su tamaño según la altura.
 export function listarTodos(lista) {
     console.log("--- Todas las plantas ---");
 
@@ -17,6 +16,7 @@ export function listarTodos(lista) {
     }
 }
 
+// Muestra y cuenta las plantas saludables que alcanzan la altura indicada.
 export function filtrar(lista, limite) {
     let encontrados = 0;
 
@@ -32,6 +32,7 @@ export function filtrar(lista, limite) {
     return encontrados;
 }
 
+// Muestra los datos básicos de la lista en la consola y devuelve la lista.
 export function listar(lista) {
     console.log("--- Lista de plantas ---");
 
@@ -47,6 +48,7 @@ export function listar(lista) {
     return lista;
 }
 
+// Pasa el texto a minúsculas y sustituye las letras acentuadas por sus equivalentes.
 export function quitarTildes(texto) {
     const originales = "áéíóúüñàèìòùäëïöâêîôûãõç";
     const equivalentes = "aeiouunaeiouaeioaeiouaoc";
@@ -64,6 +66,7 @@ export function quitarTildes(texto) {
     return resultado;
 }
 
+// Busca el texto en el nombre, la especie, la ubicación y el estado.
 export function buscarPorTexto(lista, texto) {
     if (typeof texto !== "string" || texto.trim() === "") {
         console.log("Introduce un texto para realizar la búsqueda.");
@@ -90,6 +93,7 @@ export function buscarPorTexto(lista, texto) {
     return resultado;
 }
 
+// Añade una instancia con el siguiente ID y devuelve ese ID. Si los datos fallan, devuelve null.
 export function anadirPlanta(lista, nuevaPlanta) {
     if (!nuevaPlanta || typeof nuevaPlanta !== "object") {
         console.error("La planta nueva no es válida.");
@@ -123,6 +127,7 @@ export function anadirPlanta(lista, nuevaPlanta) {
     return plantaConId.id;
 }
 
+// Quita la planta con el ID indicado y devuelve si la encontró.
 export function eliminarPorId(lista, id) {
     for (let i = 0; i < lista.length; i++) {
         if (lista[i].id === id) {
@@ -139,12 +144,12 @@ export function eliminarPorId(lista, id) {
     return false;
 }
 
+// Usa un Map para contar las plantas por estado.
 export function contarPorCategoria(lista) {
-    const recuento = new Map([
-        ["Saludable", 0],
-        ["Necesita agua", 0],
-        ["Necesita cuidados", 0]
-    ]);
+    const recuento = new Map();
+    recuento.set("Saludable", 0);
+    recuento.set("Necesita agua", 0);
+    recuento.set("Necesita cuidados", 0);
 
     for (const planta of lista) {
         switch (planta.estado) {
@@ -171,6 +176,7 @@ export function contarPorCategoria(lista) {
     return recuento;
 }
 
+// Muestra en la consola los resultados que calcula estadisticas().
 export function mostrarEstadisticas(lista) {
     const resultado = estadisticas(lista);
 
@@ -184,6 +190,7 @@ export function mostrarEstadisticas(lista) {
     console.log(`Planta más alta: ${resultado.maximo.nombre} (${resultado.maximo.altura} cm)`);
 }
 
+// Recorre la lista una sola vez para obtener la suma, la media, la máxima y la mínima.
 export function estadisticas(lista) {
     if (lista.length === 0) {
         return null;

@@ -1,11 +1,13 @@
 <!doctype html>
 <html lang="es">
   <head>
+    <!-- UTF-8 permite mostrar tildes y ñ. El enlace carga los estilos. -->
     <meta charset="UTF-8" />
     <title>Mis Plantas</title>
     <link rel="stylesheet" href="css/estilos.css" />
   </head>
   <body>
+    <!-- JavaScript actualiza el resumen y las estadísticas según la lista visible. -->
     <header>
       <h1 id="titulo">Mis Plantas</h1>
       <p id="resumen"></p>
@@ -13,6 +15,7 @@
 
     <p id="estadisticas"></p>
 
+    <!-- Cada texto explica lo que indica el color del borde de la tarjeta. -->
     <section class="leyenda-colores" aria-labelledby="titulo-leyenda">
       <h2 id="titulo-leyenda">Leyenda de colores</h2>
       <ul>
@@ -34,6 +37,7 @@
       </ul>
     </section>
 
+    <!-- El buscador filtra al escribir y los botones ordenan las coincidencias. -->
     <section>
       <input id="buscador" type="search" placeholder="Buscar planta..." />
       <button id="ordenNombre">Ordenar A-Z</button>
@@ -45,6 +49,7 @@
     <section id="formulario-plantas">
       <h2>Añadir una nueva planta</h2>
 
+      <!-- Cada label se asocia al id de su campo. required impide enviar un campo vacío. -->
       <form id="formulario">
         <p>
           <label for="nombrePlanta">Nombre:</label>
@@ -87,12 +92,15 @@
 
         <button type="submit">Añadir planta</button>
 
+        <!-- Aquí aparece el mensaje de confirmación o de error. -->
         <p id="avisoFormulario"></p>
       </form>
     </section>
 
+    <!-- JavaScript inserta aquí una tarjeta por cada planta visible. -->
     <main id="listado"></main>
 
+    <!-- El módulo espera al HTML y carga sus dependencias mediante import. -->
     <script type="module" src="js/interfaz.js"></script>
   </body>
 </html>

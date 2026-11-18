@@ -3,6 +3,7 @@ body {
     margin: 0 2rem;
 }
 
+/* Los estados aparecen en fila y saltan de línea si falta espacio. */
 .leyenda-colores ul {
     display: flex;
     flex-wrap: wrap;
@@ -65,6 +66,7 @@ body {
     border-color: green;
 }
 
+/* Grid crea tantas columnas de al menos 220 px como caben en el listado. */
 #listado {
     display: grid;
     gap: 1rem;
@@ -92,6 +94,7 @@ body {
 }
 
 /* Plantas adquiridas recientemente */
+/* El borde superior indica la antigüedad. El izquierdo indica el estado. */
 .reciente {
     border-top: 6px solid green;
 }

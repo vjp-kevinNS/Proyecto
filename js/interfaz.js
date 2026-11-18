@@ -1,7 +1,9 @@
-import { plantas as datosPlantas } from "./datos.js";
-import { buscarPorTexto, ordenar, estadisticas, anadirPlanta, fechaLegible } from "./logica.js";
+import { datosPlantas } from "./datos.js";
+import { buscarPorTexto, ordenar, estadisticas, anadirPlanta } from "./logica.js";
+import { fechaLegible } from "./fechas.js";
 import { Planta } from "./planta.js";
 
+// Esta es la colección que utiliza la página. Las altas también son instancias de Planta.
 export const plantas = [];
 for (const datos of datosPlantas) {
     plantas.push(new Planta(datos));
@@ -10,10 +12,16 @@ for (const datos of datosPlantas) {
 // 1. CONSTANTES Y ESTADO DE LA INTERFAZ
 const NOMBRE_APP = "Mis Plantas";
 const DIAS_RECIENTE = 30;
+const CLASES_ESTADO = {
+    Saludable: "tarjeta-saludable",
+    "Necesita agua": "tarjeta-necesita-agua",
+    "Necesita cuidados": "tarjeta-necesita-cuidados"
+};
 let textoBuscado = "";
 let criterio = "ninguno";
 
 // 2. COOKIES
+// Guarda el criterio de orden con una duración expresada en segundos.
 function guardarCookie(nombre, valor, dias) {
     const segundos = dias * 24 * 60 * 60;
 
@@ -22,6 +30,7 @@ function guardarCookie(nombre, valor, dias) {
     document.cookie = `${nombre}=${texto}; max-age=${segundos}; path=/`;
 }
 
+// Separa las cookies y devuelve el valor de la que coincide con el nombre.
 function leerCookie(nombre) {
     const partes = document.cookie.split("; ");
 
@@ -44,9 +53,10 @@ function crearTarjeta(elemento) {
     tarjeta.classList.add("tarjeta");
 
     // Asigna una clase según el estado de la planta.
-    const claseEstado = "tarjeta-" + elemento.estado.toLowerCase().replace(/\s+/g, "-");
-
-    tarjeta.classList.add(claseEstado);
+    const claseEstado = CLASES_ESTADO[elemento.estado];
+    if (typeof claseEstado === "string") {
+        tarjeta.classList.add(claseEstado);
+    }
 
     // Creamos el título.
     const titulo = document.createElement("h3");
@@ -110,6 +120,7 @@ function pintarResumen(mostrados) {
     }
 }
 
+// La misma función actualiza la página al buscar, ordenar o añadir una planta.
 function actualizar() {
     let resultado = plantas;
 
@@ -159,18 +170,27 @@ document.querySelector("#ordenNumero")
 document.querySelector("#ordenFecha")
     .addEventListener("click", () => elegirOrden("fecha"));
 
+const campoNombre = document.querySelector("#nombrePlanta");
+const campoEspecie = document.querySelector("#especiePlanta");
+const campoFecha = document.querySelector("#fechaPlanta");
+const campoAltura = document.querySelector("#alturaPlanta");
+const campoUbicacion = document.querySelector("#ubicacionPlanta");
+const campoEstado = document.querySelector("#estadoPlanta");
+
 document.querySelector("#formulario")
     .addEventListener("submit", function (evento) {
 
         evento.preventDefault();
 
+        // Number convierte el texto a número. Si está vacío, usamos NaN para que falle la validación.
+        const textoAltura = campoAltura.value.trim();
         const nuevaPlanta = {
-            nombre: document.querySelector("#nombrePlanta").value.trim(),
-            especie: document.querySelector("#especiePlanta").value.trim(),
-            fecha_adquisicion: document.querySelector("#fechaPlanta").value,
-            altura: document.querySelector("#alturaPlanta").valueAsNumber,
-            ubicacion: document.querySelector("#ubicacionPlanta").value.trim(),
-            estado: document.querySelector("#estadoPlanta").value
+            nombre: campoNombre.value.trim(),
+            especie: campoEspecie.value.trim(),
+            fecha_adquisicion: campoFecha.value,
+            altura: textoAltura === "" ? NaN : Number(textoAltura),
+            ubicacion: campoUbicacion.value.trim(),
+            estado: campoEstado.value
         };
 
         const aviso = document.querySelector("#avisoFormulario");
@@ -190,7 +210,12 @@ document.querySelector("#formulario")
         actualizar();
 
         // Limpiamos el formulario.
-        this.reset();
+        campoNombre.value = "";
+        campoEspecie.value = "";
+        campoFecha.value = "";
+        campoAltura.value = "";
+        campoUbicacion.value = "";
+        campoEstado.value = "Saludable";
     });
 
 // =====================================================

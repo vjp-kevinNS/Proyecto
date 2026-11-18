@@ -1,4 +1,5 @@
-export const plantas = [
+// Guarda los diez registros iniciales. La interfaz los convierte en instancias de Planta.
+export const datosPlantas = [
     { id: 1, nombre: "Monstera", especie: "Monstera deliciosa", fecha_adquisicion: "2026-10-05", altura: 80, ubicacion: "Salon", estado: "Saludable" },
     { id: 2, nombre: "Poto", especie: "Epipremnum aureum", fecha_adquisicion: "2026-09-21", altura: 45, ubicacion: "Dormitorio", estado: "Saludable" },
     { id: 3, nombre: "Cactus", especie: "Cactaceae", fecha_adquisicion: "2026-08-15", altura: 20, ubicacion: "Balcon", estado: "Saludable" },
