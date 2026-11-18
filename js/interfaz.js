@@ -1,5 +1,5 @@
 import { plantas as datosPlantas } from "./datos.js";
-import { buscarPorTexto, ordenar, estadisticas, anadirPlanta, fechaLegible, diasDesde } from "./logica.js";
+import { buscarPorTexto, ordenar, estadisticas, anadirPlanta, fechaLegible } from "./logica.js";
 import { Planta } from "./planta.js";
 
 export const plantas = [];
@@ -62,8 +62,7 @@ function crearTarjeta(elemento) {
     fecha.textContent = fechaLegible(elemento.fecha_adquisicion);
 
     // Comprobamos si la planta es reciente.
-    const dias = diasDesde(elemento.fecha_adquisicion);
-    if (dias >= 0 && dias <= DIAS_RECIENTE) {
+    if (elemento.esReciente(DIAS_RECIENTE)) {
         tarjeta.classList.add("reciente");
     }
 

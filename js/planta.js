@@ -1,3 +1,5 @@
+import { diasDesde } from "./fechas.js";
+
 const PATRON_NOMBRE = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+([ '-][A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+)*$/;
 
 export class Planta {
@@ -37,5 +39,10 @@ export class Planta {
 
     descripcion() {
         return `${this.especie} · ${this.altura} cm · ${this.ubicacion}`;
+    }
+
+    esReciente(dias) {
+        const transcurridos = diasDesde(this.fecha_adquisicion);
+        return transcurridos >= 0 && transcurridos <= dias;
     }
 }

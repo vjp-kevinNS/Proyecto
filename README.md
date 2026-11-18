@@ -513,7 +513,7 @@ El reto 1 está en `../retos-s14`, fuera del repositorio del proyecto. Incluye `
 
 `interfaz.js` convierte los diez registros iniciales en instancias de `Planta`. El formulario también crea instancias. La clase comprueba el nombre y los campos de texto obligatorios. El setter `altura` exige un número finito mayor o igual que cero.
 
-Cada tarjeta usa `descripcion()` para mostrar la especie, la altura y la ubicación.
+Cada tarjeta usa `descripcion()` para mostrar la especie, la altura y la ubicación. `esReciente(dias)` calcula los días transcurridos desde `this.fecha_adquisicion`. La página llama a `esReciente(30)` para aplicar la clase CSS `reciente`.
 
 Para comprobar el error de validación en la consola del navegador:
 
