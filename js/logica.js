@@ -1,7 +1,11 @@
 // Funciones que trabajan con los datos, sin acceder al DOM.
 
+import { crearFecha } from "./fechas.js";
+import { Planta } from "./planta.js";
+
+export { crearFecha, fechaLegible, diasDesde } from "./fechas.js";
+
 const LIMITE_ALTURA = 50;
-const PATRON_NOMBRE = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+([ '-][A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+)*$/;
 
 export function listarTodos(lista) {
     console.log("--- Todas las plantas ---");
@@ -92,33 +96,13 @@ export function anadirPlanta(lista, nuevaPlanta) {
         return null;
     }
 
-    // Comprobamos que el nombre cumple el patrón Regex.
-    if (!PATRON_NOMBRE.test(nuevaPlanta.nombre)) {
-        console.error("El nombre de la planta no es válido.");
-        return null;
-    }
-
-    const camposTexto = [
-        "nombre",
-        "especie",
-        "fecha_adquisicion",
-        "ubicacion",
-        "estado"
-    ];
-
-    let plantaValida = true;
-    for (const campo of camposTexto) {
-        if (typeof nuevaPlanta[campo] !== "string" || nuevaPlanta[campo].trim() === "") {
-            plantaValida = false;
-        }
-    }
-    if (typeof nuevaPlanta.altura !== "number" || Number.isNaN(nuevaPlanta.altura) ||
-        nuevaPlanta.altura < 0 || nuevaPlanta.altura === Infinity) {
-        plantaValida = false;
-    }
-
-    if (!plantaValida) {
-        console.error("La planta nueva debe incluir sus datos y una altura válida.");
+    let plantaConId;
+    try {
+        plantaConId = nuevaPlanta instanceof Planta && !lista.includes(nuevaPlanta)
+            ? nuevaPlanta
+            : new Planta(nuevaPlanta);
+    } catch (error) {
+        console.error(error.message);
         return null;
     }
 
@@ -130,15 +114,7 @@ export function anadirPlanta(lista, nuevaPlanta) {
         }
     }
 
-    const plantaConId = {
-        id: mayorId + 1,
-        nombre: nuevaPlanta.nombre,
-        especie: nuevaPlanta.especie,
-        fecha_adquisicion: nuevaPlanta.fecha_adquisicion,
-        altura: nuevaPlanta.altura,
-        ubicacion: nuevaPlanta.ubicacion,
-        estado: nuevaPlanta.estado
-    };
+    plantaConId.id = mayorId + 1;
 
     lista.push(plantaConId);
 
@@ -259,24 +235,4 @@ export function ordenar(lista, criterio) {
     }
 
     return resultado;
-}
-
-export function crearFecha(texto) {
-    return new Date(texto + "T00:00:00");
-}
-
-export function fechaLegible(texto) {
-    return crearFecha(texto).toLocaleDateString("es-ES", {
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-    });
-}
-
-export function diasDesde(texto) {
-    const MS_DIA = 24 * 60 * 60 * 1000;
-
-    const diferencia = Date.now() - crearFecha(texto).getTime();
-
-    return Math.floor(diferencia / MS_DIA);
 }

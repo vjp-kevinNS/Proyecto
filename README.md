@@ -187,7 +187,7 @@ La cookie tiene una duración de 30 días. De esta forma, al recargar la página
 Las funciones de lógica pueden probarse desde la consola del navegador. Primero ejecuta estas dos instrucciones una sola vez por recarga; después funcionan los ejemplos de lógica de este README:
 
 ```javascript
-const { plantas } = await import("./js/datos.js");
+const { plantas } = await import("./js/interfaz.js");
 const { listarTodos, filtrar, listar, quitarTildes, buscarPorTexto, anadirPlanta, eliminarPorId, contarPorCategoria, mostrarEstadisticas, estadisticas, ordenar, crearFecha, fechaLegible, diasDesde } = await import("./js/logica.js");
 ```
 
@@ -299,7 +299,7 @@ Esta función actualiza el elemento HTML con el identificador `resumen`.
 
 Añade una planta nueva a la colección.
 
-Calcula el identificador siguiente al mayor ID existente, crea el objeto de la nueva planta, lo incorpora al array mediante `push()` y devuelve el ID asignado.
+Acepta los datos de la planta o una instancia de `Planta`, asigna el siguiente ID y añade la instancia a la colección. Devuelve el ID asignado.
 
 Si el elemento no es válido, muestra un mensaje y devuelve `null`.
 
@@ -508,3 +508,16 @@ La aplicación se ha separado en tres módulos y mantiene las mismas funcionalid
 El HTML carga un único script con `type="module"`. Es necesario abrir el proyecto con Live Server; los módulos no se ejecutan abriendo el HTML con doble clic.
 
 El reto 1 está en `../retos-s14`, fuera del repositorio del proyecto. Incluye `maximo`, `unir`, `conTiempo` y `contarSi`, con pruebas y comentarios sobre sus resultados esperados. No se han añadido los ejercicios opcionales.
+
+## Sprint 2 · Sesión 15
+
+`interfaz.js` convierte los diez registros iniciales en instancias de `Planta`. El formulario también crea instancias. La clase comprueba el nombre y los campos de texto obligatorios. El setter `altura` exige un número finito mayor o igual que cero.
+
+Cada tarjeta usa `descripcion()` para mostrar la especie, la altura y la ubicación.
+
+Para comprobar el error de validación en la consola del navegador:
+
+```javascript
+const { Planta } = await import("./js/planta.js");
+new Planta({ nombre: "X", altura: -3 }); // RangeError
+```

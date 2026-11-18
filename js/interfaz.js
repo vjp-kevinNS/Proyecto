@@ -1,5 +1,11 @@
-import { plantas } from "./datos.js";
+import { plantas as datosPlantas } from "./datos.js";
 import { buscarPorTexto, ordenar, estadisticas, anadirPlanta, fechaLegible, diasDesde } from "./logica.js";
+import { Planta } from "./planta.js";
+
+export const plantas = [];
+for (const datos of datosPlantas) {
+    plantas.push(new Planta(datos));
+}
 
 // 1. CONSTANTES Y ESTADO DE LA INTERFAZ
 const NOMBRE_APP = "Mis Plantas";
@@ -48,7 +54,7 @@ function crearTarjeta(elemento) {
 
     // Creamos los datos de la planta.
     const datos = document.createElement("p");
-    datos.textContent = `${elemento.especie} · ${elemento.altura} cm · ${elemento.ubicacion}`;
+    datos.textContent = elemento.descripcion();
 
     // Creamos el párrafo con la fecha de adquisición.
     const fecha = document.createElement("p");
@@ -163,18 +169,17 @@ document.querySelector("#formulario")
             nombre: document.querySelector("#nombrePlanta").value.trim(),
             especie: document.querySelector("#especiePlanta").value.trim(),
             fecha_adquisicion: document.querySelector("#fechaPlanta").value,
-            altura: Number(document.querySelector("#alturaPlanta").value),
+            altura: document.querySelector("#alturaPlanta").valueAsNumber,
             ubicacion: document.querySelector("#ubicacionPlanta").value.trim(),
             estado: document.querySelector("#estadoPlanta").value
         };
 
         const aviso = document.querySelector("#avisoFormulario");
 
-        // Intentamos añadir la planta.
-        const resultado = anadirPlanta(plantas, nuevaPlanta);
-
-        if (resultado === null) {
-            aviso.textContent = "El nombre no es válido o faltan datos. Revisa el formulario.";
+        try {
+            anadirPlanta(plantas, new Planta(nuevaPlanta));
+        } catch (error) {
+            aviso.textContent = error.message;
             aviso.style.color = "red";
             return;
         }
