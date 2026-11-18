@@ -498,11 +498,6 @@ Colaboración en las restantes tareas de desarrollo del proyecto:
 - Integración de `descripcion()` en las tarjetas para mostrar la especie, la altura y la ubicación, y de `esReciente(30)` para resaltar las plantas adquiridas en los últimos 30 días.
 - Comprobaciones automatizadas de la lógica, las importaciones y los eventos con un DOM simulado, incluidas las altas válidas y el rechazo de alturas inválidas.
 
-### Trabajo en equipo
-
-Ambos integrantes han colaborado en las pruebas, la resolución de errores y la evolución del proyecto.
-
-## Sprint 2 · Sesión 14
 
 La aplicación se ha separado en tres módulos y mantiene las mismas funcionalidades:
 
@@ -514,11 +509,16 @@ El HTML carga un único script con `type="module"`. Es necesario abrir el proyec
 
 El reto 1 está en `../retos-s14`, fuera del repositorio del proyecto. Incluye `maximo`, `unir`, `conTiempo` y `contarSi`, con pruebas y comentarios sobre sus resultados esperados. No se han añadido los ejercicios opcionales.
 
-## Sprint 2 · Sesión 15
 
 `interfaz.js` convierte los diez registros iniciales en instancias de `Planta`. El formulario también crea instancias. La clase comprueba el nombre y los campos de texto obligatorios. El setter `altura` exige un número finito mayor o igual que cero.
 
 Cada tarjeta usa `descripcion()` para mostrar la especie, la altura y la ubicación. `esReciente(dias)` calcula los días transcurridos desde `this.fecha_adquisicion`. La página llama a `esReciente(30)` para aplicar la clase CSS `reciente`.
+
+### Trabajo en equipo
+
+Ambos integrantes han colaborado en las pruebas, la resolución de errores y la evolución del proyecto.
+
+
 
 Para comprobar el error de validación en la consola del navegador:
 
