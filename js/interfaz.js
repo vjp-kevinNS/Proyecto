@@ -1,13 +1,11 @@
 import { datosPlantas } from "./datos.js";
-import { buscarPorTexto, ordenar, estadisticas, anadirPlanta } from "./logica.js";
+import { ordenar, estadisticas } from "./logica.js";
 import { fechaLegible } from "./fechas.js";
 import { Planta } from "./planta.js";
+import { ColeccionPlantas } from "./coleccion.js";
 
-// Esta es la colección que utiliza la página. Las altas también son instancias de Planta.
-export const plantas = [];
-for (const datos of datosPlantas) {
-    plantas.push(new Planta(datos));
-}
+// Creamos la colección de plantas a partir de los datos iniciales.
+export const coleccion = ColeccionPlantas.desdeDatos(datosPlantas);
 
 // 1. CONSTANTES Y ESTADO DE LA INTERFAZ
 const NOMBRE_APP = "Mis Plantas";
@@ -113,7 +111,7 @@ function pintarResumen(mostrados) {
     const resumen = document.querySelector("#resumen");
 
     if (mostrados > 0) {
-        resumen.textContent = `Mostrando ${mostrados} de ${plantas.length} plantas`;
+        resumen.textContent = `Mostrando ${mostrados} de ${coleccion.total} plantas`;
 
     } else {
         resumen.textContent = `No hay plantas que contengan "${textoBuscado}"`;
@@ -122,11 +120,11 @@ function pintarResumen(mostrados) {
 
 // La misma función actualiza la página al buscar, ordenar o añadir una planta.
 function actualizar() {
-    let resultado = plantas;
+    let resultado = coleccion.listar();
 
     // Primero aplicamos el buscador.
     if (textoBuscado.trim() !== "") {
-        resultado = buscarPorTexto(plantas, textoBuscado);
+        resultado = coleccion.buscar(textoBuscado);
     }
 
     // Después aplicamos el orden seleccionado.
@@ -196,7 +194,7 @@ document.querySelector("#formulario")
         const aviso = document.querySelector("#avisoFormulario");
 
         try {
-            anadirPlanta(plantas, new Planta(nuevaPlanta));
+            coleccion.anadir(new Planta(nuevaPlanta));
         } catch (error) {
             aviso.textContent = error.message;
             aviso.style.color = "red";
@@ -222,8 +220,8 @@ document.querySelector("#formulario")
 // 5. INICIO
 // =====================================================
 
-console.log(`${NOMBRE_APP}: ${plantas.length} plantas cargadas`);
-console.table(plantas);
+console.log(`${NOMBRE_APP}: ${coleccion.total} plantas cargadas`);
+console.table(coleccion.listar());
 
 // Recuperamos el último orden guardado durante 30 días.
 const ordenGuardado = leerCookie("orden");
