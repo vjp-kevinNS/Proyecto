@@ -24,6 +24,26 @@ Las funcionalidades incorporadas son:
 
 Se han utilizado HTML, CSS y JavaScript, aplicando manipulación del DOM, eventos, arrays, funciones, objetos Date, cookies y expresiones regulares.
 
+## Sprint 2
+
+Durante el Sprint 2 se ha incorporado una clase gestora para centralizar las operaciones de la colección de plantas. El objetivo es trabajar con un objeto que controle la colección, en lugar de gestionar directamente el array desde la interfaz.
+
+Las funcionalidades incorporadas son:
+
+- Creación de la clase `ColeccionPlantas` en el módulo `js/coleccion.js`.
+- Constructor que recibe y almacena la colección de plantas.
+- Getter `total`, que devuelve el número de plantas.
+- Método `listar()`, que devuelve una copia de la colección para evitar modificar directamente el array interno.
+- Método `anadir(planta)`, que permite añadir una planta utilizando la función de lógica existente.
+- Método `buscar(texto)`, que permite buscar plantas por texto.
+- Método `eliminar(id)`, que elimina una planta mediante su identificador.
+- Método estático `desdeDatos(datos)`, que crea las instancias de `Planta` a partir de los datos iniciales y devuelve una nueva `ColeccionPlantas`.
+- Integración de la clase gestora en `interfaz.js`, que utiliza sus métodos para listar, buscar y añadir plantas, y consulta `coleccion.total` para obtener el total.
+
+De esta forma, la interfaz trabaja con la instancia `coleccion` y la clase `ColeccionPlantas` centraliza el acceso a los datos. Se mantienen las funcionalidades del Sprint 1, como las tarjetas, la búsqueda, la ordenación, las estadísticas, las cookies y el formulario.
+
+Se han realizado comprobaciones desde la consola del navegador creando una colección independiente con `ColeccionPlantas.desdeDatos()`, consultando su total, buscando plantas y probando la eliminación con identificadores existentes y no existentes.
+
 ## Estructura del proyecto
 
 ```text
@@ -37,6 +57,7 @@ Proyecto/
     ├── fechas.js
     ├── logica.js
     ├── planta.js
+    ├── coleccion.js
     └── interfaz.js
 ```
 
@@ -56,7 +77,7 @@ No necesita una base de datos.
 
 ## Datos de la colección
 
-La constante `plantas` contiene inicialmente diez plantas. Cada objeto tiene los siguientes campos:
+El módulo `datos.js` exporta la constante `datosPlantas`, que contiene los diez registros iniciales. Cada objeto tiene los siguientes campos:
 
 | Campo | Descripción | Tipo |
 |---|---|---|
@@ -70,7 +91,7 @@ La constante `plantas` contiene inicialmente diez plantas. Cada objeto tiene los
 
 Los estados utilizados en los datos iniciales son `Saludable`, `Necesita agua` y `Necesita cuidados`.
 
-La constante `NOMBRE_APP` contiene el nombre de la aplicación (`Mis Plantas`). La constante `LIMITE_ALTURA` establece el límite de 50 cm utilizado por `listarTodos` para clasificar las plantas como pequeñas o grandes.
+La constante `NOMBRE_APP` contiene el nombre de la aplicación (`Mis Plantas`). La constante `LIMITE_ALTURA` establece el límite de 50 cm utilizado por `listarTodos` para clasificar las plantas como pequeñas o grandes. En la interfaz, los datos iniciales se convierten en instancias de `Planta` y se gestionan mediante una instancia de `ColeccionPlantas`.
 
 Al cargar la página, los datos iniciales se muestran mediante `console.table()`.
 
@@ -80,7 +101,7 @@ La cookie únicamente guarda el criterio de ordenación. No almacena los cambios
 
 El campo «Buscar planta...» filtra las tarjetas mientras escribes. Busca en el nombre, la especie, la ubicación y el estado; no distingue entre mayúsculas, minúsculas ni tildes. Si no hay coincidencias, no se muestran tarjetas. Al borrar el texto, se muestran de nuevo todas las plantas.
 
-Los botones permiten ordenar las tarjetas por nombre (A-Z), por altura de menor a mayor y por fecha de adquisición, mostrando primero las plantas más recientes. La búsqueda y el orden se pueden combinar: el orden se aplica a los resultados de la búsqueda. Las funciones `buscarPorTexto(lista, texto)` y `ordenar(lista, criterio)` realizan estas operaciones por separado; `actualizar()` las combina para refrescar las tarjetas y las estadísticas. El ordenamiento trabaja sobre una copia, por lo que no modifica el array original `plantas`.
+Los botones permiten ordenar las tarjetas por nombre (A-Z), por altura de menor a mayor y por fecha de adquisición, mostrando primero las plantas más recientes. La búsqueda y el orden se pueden combinar: el orden se aplica a los resultados de la búsqueda. Las funciones `buscarPorTexto(lista, texto)` y `ordenar(lista, criterio)` realizan estas operaciones por separado; `actualizar()` las combina para refrescar las tarjetas y las estadísticas. El ordenamiento trabaja sobre una copia, por lo que no modifica el array original de la colección.
 
 La leyenda de colores identifica el estado de cada planta mediante el borde de su tarjeta:
 
@@ -477,6 +498,12 @@ Tareas realizadas:
 - Identificación visual de las plantas adquiridas durante los últimos 30 días.
 - Implementación de la ordenación por fecha de adquisición.
 - Incorporación de validación mediante expresiones regulares (Regex) para comprobar los nombres de las plantas.
+- Creación de la clase `ColeccionPlantas` en `js/coleccion.js` para centralizar la gestión de la colección.
+- Implementación del constructor y del getter `total` para almacenar la colección y consultar el número de plantas.
+- Implementación de los métodos `listar()`, `anadir()`, `buscar()` y `eliminar()` para gestionar las operaciones de la colección reutilizando la lógica existente.
+- Implementación del método estático `desdeDatos()` para crear instancias de `Planta` a partir de los datos iniciales.
+- Integración de `ColeccionPlantas` en `interfaz.js`, sustituyendo el acceso directo a la colección por los métodos de la clase gestora.
+- Pruebas desde la consola del navegador para comprobar la creación de la colección, la búsqueda, el total y la eliminación de plantas.
 
 ### Javier Becerro Batuecas
 
@@ -499,11 +526,13 @@ Colaboración en las restantes tareas de desarrollo del proyecto:
 - Comprobaciones automatizadas de la lógica, las importaciones y los eventos con un DOM simulado, incluidas las altas válidas y el rechazo de alturas inválidas.
 
 
-La aplicación se ha separado en tres módulos y mantiene las mismas funcionalidades:
+La aplicación está organizada en módulos con responsabilidades separadas:
 
 - `js/datos.js`: exporta únicamente el array `datosPlantas`, con sus diez registros originales.
 - `js/logica.js`: contiene las funciones de búsqueda, altas, bajas, listados, categorías, estadísticas, ordenación y fechas. No accede al DOM.
-- `js/interfaz.js`: importa los datos y la lógica; contiene el pintado de tarjetas, las cookies, los eventos, el formulario y el inicio.
+- `js/planta.js`: contiene la clase `Planta`, que representa cada planta y valida sus datos.
+- `js/coleccion.js`: contiene la clase `ColeccionPlantas`, que gestiona la colección mediante sus métodos y crea la colección inicial con `desdeDatos()`.
+- `js/interfaz.js`: importa los módulos necesarios; contiene el pintado de tarjetas, las cookies, los eventos, el formulario y el inicio de la aplicación. Utiliza la instancia `coleccion` para acceder a las plantas.
 
 El HTML carga un único script con `type="module"`. Es necesario abrir el proyecto con Live Server; los módulos no se ejecutan abriendo el HTML con doble clic.
 
