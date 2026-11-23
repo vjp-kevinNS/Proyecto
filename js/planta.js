@@ -1,10 +1,18 @@
+
 import { diasDesde } from "./fechas.js";
 
 // El nombre usa letras y admite espacios, guiones o apóstrofes entre palabras.
 const PATRON_NOMBRE = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+([ '-][A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+)*$/;
 
+/**
+ * Representa una planta con sus datos y operaciones.
+ */
 export class Planta {
-    // Construye una planta a partir de un registro. Asignar la altura activa su setter.
+
+    /**
+     * Crea una planta a partir de un objeto con sus datos.
+     * @param {Object} datos - Datos de la planta.
+     */
     constructor(datos) {
         this.altura = datos.altura;
 
@@ -26,12 +34,18 @@ export class Planta {
         this.estado = datos.estado;
     }
 
-    // El getter devuelve el valor guardado en _altura cuando se lee planta.altura.
+    /**
+     * Devuelve la altura de la planta.
+     * @returns {number} Altura en centímetros.
+     */
     get altura() {
         return this._altura;
     }
 
-    // El setter valida el valor antes de guardarlo. Cero sí es una altura válida.
+    /**
+     * Valida y establece la altura de la planta.
+     * @param {number} valor - Altura en centímetros.
+     */
     set altura(valor) {
         if (typeof valor !== "number" || Number.isNaN(valor) || valor < 0 || valor === Infinity) {
             throw new Error("La altura debe ser un número finito mayor o igual que cero.");
@@ -39,12 +53,19 @@ export class Planta {
         this._altura = valor;
     }
 
-    // Devuelve el texto que la interfaz coloca en la tarjeta.
+    /**
+     * Genera una descripción de la planta.
+     * @returns {string} Descripción con especie, altura y ubicación.
+     */
     descripcion() {
         return `${this.especie} · ${this.altura} cm · ${this.ubicacion}`;
     }
 
-    // Devuelve true desde el día de adquisición hasta el límite indicado. Excluye fechas futuras.
+    /**
+     * Comprueba si la planta fue adquirida dentro del número de días indicado.
+     * @param {number} dias - Número máximo de días para considerar reciente la planta.
+     * @returns {boolean} true si es reciente y false si no lo es.
+     */
     esReciente(dias) {
         const transcurridos = diasDesde(this.fecha_adquisicion);
         return transcurridos >= 0 && transcurridos <= dias;

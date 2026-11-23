@@ -44,6 +44,16 @@ De esta forma, la interfaz trabaja con la instancia `coleccion` y la clase `Cole
 
 Se han realizado comprobaciones desde la consola del navegador creando una colección independiente con `ColeccionPlantas.desdeDatos()`, consultando su total, buscando plantas y probando la eliminación con identificadores existentes y no existentes.
 
+### Documentación de las clases con JSDoc (Parte C)
+
+Se han documentado las dos clases principales del proyecto mediante comentarios JSDoc, colocados encima de cada clase y de sus métodos. Esta documentación permite conocer qué hace cada elemento y consultar la ayuda directamente desde Visual Studio Code.
+
+En `js/coleccion.js` se han documentado la clase `ColeccionPlantas`, su constructor, el getter `total` y los métodos `listar()`, `anadir()`, `buscar()`, `eliminar()` y `desdeDatos()`.
+
+En `js/planta.js` se han documentado la clase `Planta`, su constructor, el getter y setter `altura`, y los métodos `descripcion()` y `esReciente()`.
+
+Los comentarios incluyen una descripción breve y las etiquetas `@param` y `@returns` cuando corresponde, indicando los tipos de los parámetros y de los valores devueltos. Se ha comprobado en Visual Studio Code que la documentación aparece al situar el cursor sobre los métodos y al consultar la información de sus parámetros.
+
 ## Estructura del proyecto
 
 ```text
@@ -504,6 +514,8 @@ Tareas realizadas:
 - Implementación del método estático `desdeDatos()` para crear instancias de `Planta` a partir de los datos iniciales.
 - Integración de `ColeccionPlantas` en `interfaz.js`, sustituyendo el acceso directo a la colección por los métodos de la clase gestora.
 - Pruebas desde la consola del navegador para comprobar la creación de la colección, la búsqueda, el total y la eliminación de plantas.
+- Documentación JSDoc de las clases `Planta` y `ColeccionPlantas`, incluyendo sus constructores, propiedades y métodos, con descripciones, parámetros y valores de retorno.
+- Comprobación de la ayuda contextual de JSDoc en Visual Studio Code al situar el cursor sobre los métodos y consultar sus parámetros.
 
 ### Javier Becerro Batuecas
 
