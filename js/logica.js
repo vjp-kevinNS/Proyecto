@@ -7,239 +7,243 @@ const LIMITE_ALTURA = 50;
 
 // Escribe en consola todas las plantas y su tamaño según la altura.
 export function listarTodos(lista) {
-    console.log("--- Todas las plantas ---");
+  console.log("--- Todas las plantas ---");
 
-    for (const planta of lista) {
-        const etiqueta = planta.altura <= LIMITE_ALTURA ? "Pequeña" : "Grande";
+  for (const planta of lista) {
+    const etiqueta = planta.altura <= LIMITE_ALTURA ? "Pequeña" : "Grande";
 
-        console.log(`${planta.id}: ${planta.nombre} - ${planta.altura} cm - ${etiqueta}`);
-    }
+    console.log(
+      `${planta.id}: ${planta.nombre} - ${planta.altura} cm - ${etiqueta}`,
+    );
+  }
 }
 
 // Muestra y cuenta las plantas saludables que alcanzan la altura indicada.
 export function filtrar(lista, limite) {
-    let encontrados = 0;
+  let encontrados = 0;
 
-    console.log(`--- Plantas de ${limite} cm o más y saludables ---`);
+  console.log(`--- Plantas de ${limite} cm o más y saludables ---`);
 
-    for (const planta of lista) {
-        if (planta.altura >= limite && planta.estado === "Saludable") {
-            console.log(`${planta.nombre}: ${planta.altura} cm - ${planta.estado}`);
-            encontrados++;
-        }
+  for (const planta of lista) {
+    if (planta.altura >= limite && planta.estado === "Saludable") {
+      console.log(`${planta.nombre}: ${planta.altura} cm - ${planta.estado}`);
+      encontrados++;
     }
+  }
 
-    return encontrados;
+  return encontrados;
 }
 
 // Muestra los datos básicos de la lista en la consola y devuelve la lista.
 export function listar(lista) {
-    console.log("--- Lista de plantas ---");
+  console.log("--- Lista de plantas ---");
 
-    if (lista.length === 0) {
-        console.log("No hay plantas en la colección.");
-        return [];
-    }
+  if (lista.length === 0) {
+    console.log("No hay plantas en la colección.");
+    return [];
+  }
 
-    for (const planta of lista) {
-        console.log(`${planta.id}: ${planta.nombre} - ${planta.altura} cm - ${planta.ubicacion}`);
-    }
+  for (const planta of lista) {
+    console.log(
+      `${planta.id}: ${planta.nombre} - ${planta.altura} cm - ${planta.ubicacion}`,
+    );
+  }
 
-    return lista;
+  return lista;
 }
 
 // Pasa el texto a minúsculas y sustituye las letras acentuadas por sus equivalentes.
 export function quitarTildes(texto) {
-    const originales = "áéíóúüñàèìòùäëïöâêîôûãõç";
-    const equivalentes = "aeiouunaeiouaeioaeiouaoc";
-    const minusculas = texto.toLowerCase();
-    let resultado = "";
+  const originales = "áéíóúüñàèìòùäëïöâêîôûãõç";
+  const equivalentes = "aeiouunaeiouaeioaeiouaoc";
+  const minusculas = texto.toLowerCase();
+  let resultado = "";
 
-    for (const letra of minusculas) {
-        const posicion = originales.indexOf(letra);
-        if (posicion === -1) {
-            resultado += letra;
-        } else {
-            resultado += equivalentes[posicion];
-        }
+  for (const letra of minusculas) {
+    const posicion = originales.indexOf(letra);
+    if (posicion === -1) {
+      resultado += letra;
+    } else {
+      resultado += equivalentes[posicion];
     }
-    return resultado;
+  }
+  return resultado;
 }
 
 // Busca el texto en el nombre, la especie, la ubicación y el estado.
 export function buscarPorTexto(lista, texto) {
-    if (typeof texto !== "string" || texto.trim() === "") {
-        console.log("Introduce un texto para realizar la búsqueda.");
-        return [];
-    }
+  if (typeof texto !== "string" || texto.trim() === "") {
+    console.log("Introduce un texto para realizar la búsqueda.");
+    return [];
+  }
 
-    const buscado = quitarTildes(texto.trim());
-    const resultado = [];
+  const buscado = quitarTildes(texto.trim());
 
-    for (const planta of lista) {
-        const textoPlanta = quitarTildes(
-            `${planta.nombre} ${planta.especie} ${planta.ubicacion} ${planta.estado}`
-        );
+  // FILTER: devuelve un nuevo array con las plantas que coinciden.
+  const resultado = lista.filter((planta) => {
+    const textoPlanta = quitarTildes(
+      `${planta.nombre} ${planta.especie} ${planta.ubicacion} ${planta.estado}`,
+    );
 
-        if (textoPlanta.includes(buscado)) {
-            resultado.push(planta);
-        }
-    }
+    return textoPlanta.includes(buscado);
+  });
 
-    if (resultado.length === 0) {
-        console.log("No se encontraron plantas.");
-    }
+  if (resultado.length === 0) {
+    console.log("No se encontraron plantas.");
+  }
 
-    return resultado;
+  return resultado;
 }
 
 // Añade una instancia con el siguiente ID y devuelve ese ID. Si los datos fallan, devuelve null.
 export function anadirPlanta(lista, nuevaPlanta) {
-    if (!nuevaPlanta || typeof nuevaPlanta !== "object") {
-        console.error("La planta nueva no es válida.");
-        return null;
+  if (!nuevaPlanta || typeof nuevaPlanta !== "object") {
+    console.error("La planta nueva no es válida.");
+    return null;
+  }
+
+  let plantaConId;
+  try {
+    plantaConId =
+      nuevaPlanta instanceof Planta && !lista.includes(nuevaPlanta)
+        ? nuevaPlanta
+        : new Planta(nuevaPlanta);
+  } catch (error) {
+    console.error(error.message);
+    return null;
+  }
+
+  let mayorId = 0;
+
+  for (const planta of lista) {
+    if (
+      typeof planta.id === "number" &&
+      !Number.isNaN(planta.id) &&
+      planta.id !== Infinity &&
+      planta.id > mayorId
+    ) {
+      mayorId = planta.id;
     }
+  }
 
-    let plantaConId;
-    try {
-        plantaConId = nuevaPlanta instanceof Planta && !lista.includes(nuevaPlanta)
-            ? nuevaPlanta
-            : new Planta(nuevaPlanta);
-    } catch (error) {
-        console.error(error.message);
-        return null;
-    }
+  plantaConId.id = mayorId + 1;
 
-    let mayorId = 0;
+  lista.push(plantaConId);
 
-    for (const planta of lista) {
-        if (typeof planta.id === "number" && !Number.isNaN(planta.id) && planta.id !== Infinity && planta.id > mayorId) {
-            mayorId = planta.id;
-        }
-    }
+  console.log(`Planta añadida: ${plantaConId.nombre} (ID: ${plantaConId.id})`);
 
-    plantaConId.id = mayorId + 1;
-
-    lista.push(plantaConId);
-
-    console.log(`Planta añadida: ${plantaConId.nombre} (ID: ${plantaConId.id})`);
-
-    return plantaConId.id;
+  return plantaConId.id;
 }
 
 // Quita la planta con el ID indicado y devuelve si la encontró.
 export function eliminarPorId(lista, id) {
-    for (let i = 0; i < lista.length; i++) {
-        if (lista[i].id === id) {
-            const eliminada = lista.splice(i, 1)[0];
+  for (let i = 0; i < lista.length; i++) {
+    if (lista[i].id === id) {
+      const eliminada = lista.splice(i, 1)[0];
 
-            console.log(`Planta eliminada: ${eliminada.nombre}`);
+      console.log(`Planta eliminada: ${eliminada.nombre}`);
 
-            return true;
-        }
+      return true;
     }
+  }
 
-    console.log(`No existe ninguna planta con ID ${id}.`);
+  console.log(`No existe ninguna planta con ID ${id}.`);
 
-    return false;
+  return false;
 }
 
 // Usa un Map para contar las plantas por estado.
 export function contarPorCategoria(lista) {
-    const recuento = new Map();
-    recuento.set("Saludable", 0);
-    recuento.set("Necesita agua", 0);
-    recuento.set("Necesita cuidados", 0);
+  const recuento = new Map();
+  recuento.set("Saludable", 0);
+  recuento.set("Necesita agua", 0);
+  recuento.set("Necesita cuidados", 0);
 
-    for (const planta of lista) {
-        switch (planta.estado) {
-            case "Saludable":
-            case "Necesita agua":
-            case "Necesita cuidados":
-                recuento.set(
-                    planta.estado,
-                    recuento.get(planta.estado) + 1
-                );
-                break;
+  for (const planta of lista) {
+    switch (planta.estado) {
+      case "Saludable":
+      case "Necesita agua":
+      case "Necesita cuidados":
+        recuento.set(planta.estado, recuento.get(planta.estado) + 1);
+        break;
 
-            default:
-                console.warn(`Estado no reconocido: ${planta.estado}`);
-        }
+      default:
+        console.warn(`Estado no reconocido: ${planta.estado}`);
     }
+  }
 
-    console.log("--- Recuento por estado ---");
+  console.log("--- Recuento por estado ---");
 
-    for (const [estado, cantidad] of recuento) {
-        console.log(`${estado}: ${cantidad}`);
-    }
+  for (const [estado, cantidad] of recuento) {
+    console.log(`${estado}: ${cantidad}`);
+  }
 
-    return recuento;
+  return recuento;
 }
 
 // Muestra en la consola los resultados que calcula estadisticas().
 export function mostrarEstadisticas(lista) {
-    const resultado = estadisticas(lista);
+  const resultado = estadisticas(lista);
 
-    if (resultado === null) {
-        console.log("No hay plantas para calcular estadísticas.");
-        return;
-    }
+  if (resultado === null) {
+    console.log("No hay plantas para calcular estadísticas.");
+    return;
+  }
 
-    console.log(`Altura total: ${resultado.total} cm`);
-    console.log(`Altura media: ${resultado.media.toFixed(1)} cm`);
-    console.log(`Planta más alta: ${resultado.maximo.nombre} (${resultado.maximo.altura} cm)`);
+  console.log(`Altura total: ${resultado.total} cm`);
+  console.log(`Altura media: ${resultado.media.toFixed(1)} cm`);
+  console.log(
+    `Planta más alta: ${resultado.maximo.nombre} (${resultado.maximo.altura} cm)`,
+  );
 }
 
 // Recorre la lista una sola vez para obtener la suma, la media, la máxima y la mínima.
 export function estadisticas(lista) {
-    if (lista.length === 0) {
-        return null;
+  if (lista.length === 0) {
+    return null;
+  }
+
+  let suma = 0;
+  let maximo = lista[0];
+  let minimo = lista[0];
+
+  for (const planta of lista) {
+    suma += planta.altura;
+
+    if (planta.altura > maximo.altura) {
+      maximo = planta;
     }
 
-    let suma = 0;
-    let maximo = lista[0];
-    let minimo = lista[0];
-
-    for (const planta of lista) {
-        suma += planta.altura;
-
-        if (planta.altura > maximo.altura) {
-            maximo = planta;
-        }
-
-        if (planta.altura < minimo.altura) {
-            minimo = planta;
-        }
+    if (planta.altura < minimo.altura) {
+      minimo = planta;
     }
+  }
 
-    return {
-        total: suma,
-        media: suma / lista.length,
-        maximo: maximo,
-        minimo: minimo
-    };
+  return {
+    total: suma,
+    media: suma / lista.length,
+    maximo: maximo,
+    minimo: minimo,
+  };
 }
 
 export function ordenar(lista, criterio) {
-    // Creamos una copia para no modificar el array original.
-    const resultado = [...lista];
+  // Creamos una copia para no modificar el array original.
+  const resultado = [...lista];
 
-    if (criterio === "nombre") {
-        // Orden alfabético.
-        resultado.sort((a, b) =>
-            a.nombre.localeCompare(b.nombre)
-        );
+  if (criterio === "nombre") {
+    // Orden alfabético.
+    resultado.sort((a, b) => a.nombre.localeCompare(b.nombre));
+  } else if (criterio === "altura") {
+    // Orden numérico de menor a mayor.
+    resultado.sort((a, b) => a.altura - b.altura);
+  } else if (criterio === "fecha") {
+    // Orden por fecha, de más reciente a más antigua.
+    resultado.sort(
+      (a, b) =>
+        crearFecha(b.fecha_adquisicion) - crearFecha(a.fecha_adquisicion),
+    );
+  }
 
-    } else if (criterio === "altura") {
-        // Orden numérico de menor a mayor.
-        resultado.sort((a, b) => a.altura - b.altura);
-
-    } else if (criterio === "fecha") {
-        // Orden por fecha, de más reciente a más antigua.
-        resultado.sort((a, b) =>
-            crearFecha(b.fecha_adquisicion) - crearFecha(a.fecha_adquisicion)
-        );
-    }
-
-    return resultado;
+  return resultado;
 }
