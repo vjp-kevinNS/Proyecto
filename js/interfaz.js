@@ -259,3 +259,42 @@ const ordenGuardado = leerCookie("orden");
 criterio = ordenGuardado ?? "ninguno";
 actualizar();
 
+const vistas = [...document.querySelectorAll("[data-vista]")];
+const enlacesNavegacion = document.querySelectorAll(".barra nav a");
+let vistaActiva;
+
+function mostrarVista(enfocar = false) {
+    const ruta = window.location.hash.slice(1);
+    const siguiente = vistas.find(vista => vista.dataset.vista === ruta) ?? vistas[0];
+
+    if (siguiente === vistaActiva) {
+        return;
+    }
+
+    vistaActiva = siguiente;
+    for (const vista of vistas) {
+        vista.hidden = vista !== siguiente;
+    }
+
+    for (const enlace of enlacesNavegacion) {
+        if (enlace.hash === `#${siguiente.dataset.vista}`) {
+            enlace.setAttribute("aria-current", "page");
+        } else {
+            enlace.removeAttribute("aria-current");
+        }
+    }
+
+    const titulo = siguiente.querySelector("h1");
+    document.title = siguiente.dataset.vista === "inicio"
+        ? NOMBRE_APP
+        : `${titulo.textContent} · ${NOMBRE_APP}`;
+
+    if (enfocar) {
+        window.scrollTo(0, 0);
+        titulo.focus({ preventScroll: true });
+    }
+}
+
+mostrarVista();
+window.addEventListener("hashchange", () => mostrarVista(true));
+
