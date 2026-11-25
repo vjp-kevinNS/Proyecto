@@ -2,20 +2,13 @@
 // CLASE GESTORA DE PLANTAS
 // ==================================================
 
-
-import {
-    anadirPlanta,
-    eliminarPorId,
-    buscarPorTexto
-} from "./logica.js";
-
+import { anadirPlanta, eliminarPorId, buscarPorTexto } from "./logica.js";
 import { Planta } from "./planta.js";
 
 /**
  * Gestiona la colección de plantas y permite realizar operaciones sobre ella.
  */
 export class ColeccionPlantas {
-
     /**
      * Crea una colección a partir de un array de plantas.
      * @param {Planta[]} plantas - Array de plantas de la colección.
@@ -80,5 +73,48 @@ export class ColeccionPlantas {
         }
 
         return new ColeccionPlantas(plantas);
+    }
+
+    /**
+     * Calcula estadísticas de las plantas de la colección.
+     * @returns {Object|null} Datos calculados o null si no hay plantas.
+     */
+    estadisticas() {
+        // Si la colección está vacía, no hay estadísticas que calcular.
+        if (this._plantas.length === 0) {
+            return null;
+        }
+
+        // REDUCE: suma las alturas de todas las plantas.
+        const alturaTotal = this._plantas.reduce(
+            (suma, planta) => suma + planta.altura,
+            0
+        );
+
+        // REDUCE: obtiene la altura máxima.
+        const mayorAltura = this._plantas.reduce(
+            (mayor, planta) => planta.altura > mayor ? planta.altura : mayor,
+            this._plantas[0].altura
+        );
+
+        // FILTER: obtiene las plantas que superan los 50 cm.
+        const plantasAltas = this._plantas.filter(
+            planta => planta.altura > 50
+        );
+
+        // MAP: obtiene un array con los nombres de las plantas.
+        const nombres = this._plantas.map(
+            planta => planta.nombre
+        );
+
+        // Devolvemos los datos calculados.
+        return {
+            cantidad: this.total,
+            alturaTotal: alturaTotal,
+            mediaAltura: alturaTotal / this.total,
+            mayorAltura: mayorAltura,
+            cantidadPlantasAltas: plantasAltas.length,
+            nombres: nombres
+        };
     }
 }

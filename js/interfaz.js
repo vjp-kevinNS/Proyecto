@@ -1,5 +1,5 @@
 import { datosPlantas } from "./datos.js";
-import { ordenar, estadisticas } from "./logica.js";
+import { ordenar } from "./logica.js";
 import { fechaLegible } from "./fechas.js";
 import { Planta } from "./planta.js";
 import { ColeccionPlantas } from "./coleccion.js";
@@ -95,16 +95,35 @@ function pintar(lista) {
     resumen.textContent = `${lista.length} plantas`;
 }
 
-function pintarEstadisticas(lista) {
-    const resultado = estadisticas(lista);
-    const elemento = document.querySelector("#estadisticas");
+function pintarEstadisticas() {
+    const resultado = coleccion.estadisticas();
+    const panel = document.querySelector("#estadisticas");
+
+    // Vaciamos el panel antes de volver a mostrar los datos.
+    panel.replaceChildren();
 
     if (resultado === null) {
-        elemento.textContent = "No hay plantas para calcular estadísticas.";
+        const aviso = document.createElement("li");
+        aviso.textContent = "No hay plantas para calcular estadísticas.";
+        panel.append(aviso);
         return;
     }
 
-    elemento.textContent = `Altura total: ${resultado.total} cm | Altura media: ${resultado.media.toFixed(1)} cm | Más alta: ${resultado.maximo.nombre} (${resultado.maximo.altura} cm) | Más baja: ${resultado.minimo.nombre} (${resultado.minimo.altura} cm)`;
+    // Creamos una línea del panel por cada dato calculado.
+    const lineas = [
+        `Número de plantas: ${resultado.cantidad}`,
+        `Altura total: ${resultado.alturaTotal} cm`,
+        `Altura media: ${resultado.mediaAltura.toFixed(1)} cm`,
+        `Altura máxima: ${resultado.mayorAltura} cm`,
+        `Plantas de más de 50 cm: ${resultado.cantidadPlantasAltas}`,
+        `Nombres: ${resultado.nombres.join(", ")}`
+    ];
+
+    for (const linea of lineas) {
+        const elemento = document.createElement("li");
+        elemento.textContent = linea;
+        panel.append(elemento);
+    }
 }
 
 function pintarResumen(mostrados) {
@@ -132,7 +151,7 @@ function actualizar() {
 
     // Finalmente actualizamos la página.
     pintar(resultado);
-    pintarEstadisticas(resultado);
+    pintarEstadisticas();
     pintarResumen(resultado.length);
 }
 

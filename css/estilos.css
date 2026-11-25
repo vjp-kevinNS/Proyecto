@@ -104,3 +104,19 @@ body {
     color: #6b7785;
     font-size: 0.9rem;
 }
+
+/* Panel de estadísticas de la colección */
+.panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.panel li {
+    background: #f1f5f1;
+    border-radius: 6px;
+    padding: 0.6rem 0.8rem;
+}
