@@ -60,22 +60,33 @@ function crearTarjeta(elemento) {
     const titulo = document.createElement("h3");
     titulo.textContent = elemento.nombre;
 
-    // Creamos los datos de la planta.
+    const especie = document.createElement("p");
+    especie.className = "especie";
+    especie.textContent = elemento.especie;
+
     const datos = document.createElement("p");
-    datos.textContent = elemento.descripcion();
+    datos.textContent = `${elemento.altura} cm · ${elemento.ubicacion}`;
 
     // Creamos el párrafo con la fecha de adquisición.
     const fecha = document.createElement("p");
     fecha.classList.add("fecha");
-    fecha.textContent = fechaLegible(elemento.fecha_adquisicion);
+    fecha.textContent = `Adquirida el ${fechaLegible(elemento.fecha_adquisicion)}`;
 
-    // Comprobamos si la planta es reciente.
+    const etiquetas = document.createElement("div");
+    etiquetas.className = "etiquetas";
+    const estado = document.createElement("span");
+    estado.className = "etiqueta estado";
+    estado.textContent = elemento.estado;
+    etiquetas.append(estado);
+
     if (elemento.esReciente(DIAS_RECIENTE)) {
-        tarjeta.classList.add("reciente");
+        const reciente = document.createElement("span");
+        reciente.className = "etiqueta etiqueta-reciente";
+        reciente.textContent = "Adquisición reciente";
+        etiquetas.append(reciente);
     }
 
-    // Añadimos todos los elementos a la tarjeta.
-    tarjeta.append(titulo, datos, fecha);
+    tarjeta.append(titulo, especie, datos, fecha, etiquetas);
 
     return tarjeta;
 }
@@ -89,10 +100,6 @@ function pintar(lista) {
     for (const elemento of lista) {
         listado.append(crearTarjeta(elemento));
     }
-
-    const resumen = document.querySelector("#resumen");
-
-    resumen.textContent = `${lista.length} plantas`;
 }
 
 function pintarEstadisticas() {
@@ -111,17 +118,20 @@ function pintarEstadisticas() {
 
     // Creamos una línea del panel por cada dato calculado.
     const lineas = [
-        `Número de plantas: ${resultado.cantidad}`,
-        `Altura total: ${resultado.alturaTotal} cm`,
-        `Altura media: ${resultado.mediaAltura.toFixed(1)} cm`,
-        `Altura máxima: ${resultado.mayorAltura} cm`,
-        `Plantas de más de 50 cm: ${resultado.cantidadPlantasAltas}`,
-        `Nombres: ${resultado.nombres.join(", ")}`
+        ["Total de plantas", resultado.cantidad],
+        ["Altura total", `${resultado.alturaTotal} cm`],
+        ["Altura media", `${resultado.mediaAltura.toLocaleString("es-ES", { maximumFractionDigits: 1 })} cm`],
+        ["Altura máxima", `${resultado.mayorAltura} cm`],
+        ["De más de 50 cm", resultado.cantidadPlantasAltas],
+        ["Nombres", resultado.nombres.join(", ")]
     ];
 
-    for (const linea of lineas) {
+    for (const [etiqueta, valor] of lineas) {
         const elemento = document.createElement("li");
-        elemento.textContent = linea;
+        const destacado = document.createElement("strong");
+        destacado.textContent = valor;
+        elemento.append(etiqueta, destacado);
+        elemento.classList.toggle("nombres", etiqueta === "Nombres");
         panel.append(elemento);
     }
 }
@@ -133,7 +143,9 @@ function pintarResumen(mostrados) {
         resumen.textContent = `Mostrando ${mostrados} de ${coleccion.total} plantas`;
 
     } else {
-        resumen.textContent = `No hay plantas que contengan "${textoBuscado}"`;
+        resumen.textContent = textoBuscado.trim()
+            ? `No se encontraron plantas para «${textoBuscado.trim()}».`
+            : "Tu colección está vacía.";
     }
 }
 
@@ -153,6 +165,9 @@ function actualizar() {
     pintar(resultado);
     pintarEstadisticas();
     pintarResumen(resultado.length);
+    for (const [selector, orden] of ordenes) {
+        document.querySelector(selector).setAttribute("aria-pressed", orden === criterio);
+    }
 }
 
 function elegirOrden(nuevo) {
@@ -175,17 +190,14 @@ document.querySelector("#buscador").addEventListener("input", function () {
     actualizar();
 });
 
-// Botón para ordenar por nombre.
-document.querySelector("#ordenNombre")
-    .addEventListener("click", () => elegirOrden("nombre"));
-
-// Botón para ordenar por altura.
-document.querySelector("#ordenNumero")
-    .addEventListener("click", () => elegirOrden("altura"));
-
-// Botón para ordenar por fecha de adquisición.
-document.querySelector("#ordenFecha")
-    .addEventListener("click", () => elegirOrden("fecha"));
+const ordenes = [
+    ["#ordenNombre", "nombre"],
+    ["#ordenNumero", "altura"],
+    ["#ordenFecha", "fecha"]
+];
+for (const [selector, orden] of ordenes) {
+    document.querySelector(selector).addEventListener("click", () => elegirOrden(orden));
+}
 
 const campoNombre = document.querySelector("#nombrePlanta");
 const campoEspecie = document.querySelector("#especiePlanta");
@@ -216,12 +228,12 @@ document.querySelector("#formulario")
             coleccion.anadir(new Planta(nuevaPlanta));
         } catch (error) {
             aviso.textContent = error.message;
-            aviso.style.color = "red";
+            aviso.dataset.estado = "error";
             return;
         }
 
         aviso.textContent = "¡Planta añadida correctamente!";
-        aviso.style.color = "green";
+        aviso.dataset.estado = "correcto";
 
         // Actualizamos las tarjetas y estadísticas.
         actualizar();

@@ -1,106 +1,99 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
   <head>
-    <!-- UTF-8 permite mostrar tildes y ñ. El enlace carga los estilos. -->
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#173c30" />
     <title>Mis Plantas</title>
     <link rel="stylesheet" href="css/estilos.css" />
   </head>
   <body>
-    <!-- JavaScript actualiza el resumen y el panel con estadísticas de toda la colección. -->
-    <header>
-      <h1 id="titulo">Mis Plantas</h1>
-      <p id="resumen"></p>
+    <header class="cabecera">
+      <div class="contenedor barra">
+        <a class="marca" href="#titulo"><span aria-hidden="true"></span> Mis Plantas</a>
+        <nav aria-label="Navegación principal">
+          <a href="#coleccion">Colección</a>
+          <a href="#formulario-plantas">Añadir planta</a>
+        </nav>
+      </div>
     </header>
 
-    <ul id="estadisticas" class="panel"></ul>
+    <main class="contenedor">
+      <section class="portada" aria-labelledby="titulo">
+        <div class="portada-texto">
+          <h1 id="titulo">Mi jardín<br />en casa</h1>
+          <p>Organiza tu colección y lleva al día el cuidado de tus plantas.</p>
+          <a class="boton portada-boton" href="#nombrePlanta">+ Añadir planta</a>
+        </div>
+        <div class="ilustracion" aria-hidden="true">
+          <span class="tallo"></span>
+          <span class="hoja hoja-1"></span>
+          <span class="hoja hoja-2"></span>
+          <span class="hoja hoja-3"></span>
+          <span class="hoja hoja-4"></span>
+          <span class="hoja hoja-5"></span>
+        </div>
+      </section>
 
-    <!-- Cada texto explica lo que indica el color del borde de la tarjeta. -->
-    <section class="leyenda-colores" aria-labelledby="titulo-leyenda">
-      <h2 id="titulo-leyenda">Leyenda de colores</h2>
-      <ul>
-        <li>
-          <span class="indicador-color saludable" aria-hidden="true"></span>
-          Verde: planta saludable
-        </li>
-        <li>
-          <span class="indicador-color necesita-agua" aria-hidden="true"></span>
-          Naranja: necesita agua
-        </li>
-        <li>
-          <span
-            class="indicador-color necesita-cuidados"
-            aria-hidden="true"
-          ></span>
-          Rojo: necesita cuidados
-        </li>
-      </ul>
-    </section>
+      <section class="estadisticas" aria-labelledby="titulo-estadisticas">
+        <h2 id="titulo-estadisticas">Tu jardín en cifras</h2>
+        <ul id="estadisticas" class="panel"></ul>
+      </section>
 
-    <!-- El buscador filtra al escribir y los botones ordenan las coincidencias. -->
-    <section>
-      <input id="buscador" type="search" placeholder="Buscar planta..." />
-      <button id="ordenNombre">Ordenar A-Z</button>
-      <button id="ordenNumero">Ordenar por altura</button>
-      <button id="ordenFecha">Más recientes primero</button>
-    </section>
+      <div class="espacio-trabajo">
+        <section id="coleccion" aria-labelledby="titulo-coleccion">
+          <h2 id="titulo-coleccion">Colección</h2>
+          <div class="controles">
+            <label for="buscador">Buscar plantas</label>
+            <input id="buscador" type="search" placeholder="Nombre, especie, ubicación o estado" />
+            <div class="ordenes" role="group" aria-label="Ordenar plantas">
+              <button id="ordenNombre" type="button" aria-pressed="false">A–Z</button>
+              <button id="ordenNumero" type="button" aria-pressed="false">Altura</button>
+              <button id="ordenFecha" type="button" aria-pressed="false">Más recientes</button>
+            </div>
+          </div>
+          <p id="resumen" role="status"></p>
+          <div id="listado"></div>
+        </section>
 
-    <!-- Formulario para añadir plantas -->
-    <section id="formulario-plantas">
-      <h2>Añadir una nueva planta</h2>
-
-      <!-- Cada label se asocia al id de su campo. required impide enviar un campo vacío. -->
-      <form id="formulario">
-        <p>
-          <label for="nombrePlanta">Nombre:</label>
-          <input
-            type="text"
-            id="nombrePlanta"
-            placeholder="Ejemplo: Monstera"
-            required
-          />
-        </p>
-
-        <p>
-          <label for="especiePlanta">Especie:</label>
-          <input type="text" id="especiePlanta" required />
-        </p>
-
-        <p>
-          <label for="fechaPlanta">Fecha de adquisición:</label>
-          <input type="date" id="fechaPlanta" required />
-        </p>
-
-        <p>
-          <label for="alturaPlanta">Altura (cm):</label>
-          <input type="number" id="alturaPlanta" min="0" required />
-        </p>
-
-        <p>
-          <label for="ubicacionPlanta">Ubicación:</label>
-          <input type="text" id="ubicacionPlanta" required />
-        </p>
-
-        <p>
-          <label for="estadoPlanta">Estado:</label>
-          <select id="estadoPlanta" required>
-            <option value="Saludable">Saludable</option>
-            <option value="Necesita agua">Necesita agua</option>
-            <option value="Necesita cuidados">Necesita cuidados</option>
-          </select>
-        </p>
-
-        <button type="submit">Añadir planta</button>
-
-        <!-- Aquí aparece el mensaje de confirmación o de error. -->
-        <p id="avisoFormulario"></p>
-      </form>
-    </section>
-
-    <!-- JavaScript inserta aquí una tarjeta por cada planta visible. -->
-    <main id="listado"></main>
-
-    <!-- El módulo espera al HTML y carga sus dependencias mediante import. -->
+        <section id="formulario-plantas" aria-labelledby="titulo-formulario">
+          <h2 id="titulo-formulario">Añadir planta</h2>
+          <form id="formulario">
+            <div class="campo">
+              <label for="nombrePlanta">Nombre</label>
+              <input type="text" id="nombrePlanta" placeholder="Ej. Monstera" required />
+            </div>
+            <div class="campo">
+              <label for="especiePlanta">Especie</label>
+              <input type="text" id="especiePlanta" placeholder="Ej. Monstera deliciosa" required />
+            </div>
+            <div class="campo">
+              <label for="fechaPlanta">Fecha de adquisición</label>
+              <input type="date" id="fechaPlanta" required />
+            </div>
+            <div class="campo">
+              <label for="alturaPlanta">Altura (cm)</label>
+              <input type="number" id="alturaPlanta" min="0" required />
+            </div>
+            <div class="campo">
+              <label for="ubicacionPlanta">Ubicación</label>
+              <input type="text" id="ubicacionPlanta" placeholder="Ej. Salón" required />
+            </div>
+            <div class="campo">
+              <label for="estadoPlanta">Estado</label>
+              <select id="estadoPlanta" required>
+                <option value="Saludable">Saludable</option>
+                <option value="Necesita agua">Necesita agua</option>
+                <option value="Necesita cuidados">Necesita cuidados</option>
+              </select>
+            </div>
+            <button class="boton" type="submit">Añadir a la colección</button>
+            <p id="avisoFormulario" role="status"></p>
+          </form>
+        </section>
+      </div>
+      <noscript><p>Activa JavaScript para consultar y editar la colección.</p></noscript>
+    </main>
     <script type="module" src="js/interfaz.js"></script>
   </body>
 </html>
